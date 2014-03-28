@@ -24,38 +24,38 @@ class RudderCalculation {
  
 private:
   /* Course to steer */
-  double CTS;
+  double m_CTS;
   
   /* Bearing to waypoint */
-  double BWP;
+  double m_BWP;
   
   /* Distance to waypoint */
-  double DWP;
+  double m_DWP;
   
   /* True wind direction */
-  double TWD;
+  double m_TWD;
   
   /* Has to tack */
-  bool TACK;
+  bool m_TACK;
   
   /* Angle around true wind direction in which the boat has to tack */
-  double TACK_ANGLE;
+  double m_TACK_ANGLE;
   
   /* Angle around true wind direction in which the boat will be turning side when tacking */
-  double SECTOR_ANGLE;
+  double m_SECTOR_ANGLE;
   
   /* These member variables do not have getters and will only be used inside the class */
   /* -------------------------- */
-  double deltaLatitudeRadians;
-  double deltaLongitudeRadians;
-  double latitudeRadians;
-  double wpLatitudeRadians;
-  double longitudeRadians;
-  double wpLongitudeRadians;
-  bool GOING_STARBOARD;
+  double m_deltaLatitudeRadians;
+  double m_deltaLongitudeRadians;
+  double m_latitudeRadians;
+  double m_wpLatitudeRadians;
+  double m_longitudeRadians;
+  double m_wpLongitudeRadians;
+  bool m_GOING_STARBOARD;
   
   /* Did we tack last iteration? */
-  bool PREVIOUS_ITERATION_TACK;
+  bool m_PREVIOUS_ITERATION_TACK;
   /* -------------------------- */
   
   /* These methods will only be used inside the class */
