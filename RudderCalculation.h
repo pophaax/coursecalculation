@@ -1,10 +1,13 @@
-/* Author: rlunden */
+#ifndef __RUDDERCALCULATION_H__
+#define __RUDDERCALCULATION_H__
 
 #include <iostream>
 #include <math.h>
 
 using namespace std;
 
+
+/* Author: rlunden */
 /**---------------------------------------
 * 	USAGE:
 * 
@@ -119,3 +122,5 @@ public:
   bool getTACK();
   
 };
+
+#endif
