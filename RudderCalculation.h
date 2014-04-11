@@ -1,7 +1,6 @@
-#ifndef __RUDDERCALCULATION_H__
-#define __RUDDERCALCULATION_H__
+#ifndef __COURSECALCULATION_H__
+#define __COURSECALCULATION_H__
 
-#include <iostream>
 #include <math.h>
 
 using namespace std;
@@ -10,7 +9,7 @@ using namespace std;
 /**---------------------------------------
  * 	USAGE:
  * 
- * 	RudderCalculation rc;
+ * 	CourseCalculation rc;
  * 
  * 	rc.setTACK_ANGLE(45);
  * 	rc.setSECTOR_ANGLE(5);
@@ -22,7 +21,7 @@ using namespace std;
  * 	rc.calculateCTS();
  *----------------------------------------*/
 
-class RudderCalculation {
+class CourseCalculation {
 
 private:
 	/* Course to steer */
@@ -80,10 +79,10 @@ private:
 public:
 
 	/* Constructor */
-	RudderCalculation();
+	CourseCalculation();
 
 	/* Destructor */
-	~RudderCalculation();
+	~CourseCalculation();
 
 	/* Calculates the bearing to waypoint angle using the boat's coordinates and the waypoint's coordinates */
 	void calculateBWP(double boatLong, double boatLat, double wpLong,

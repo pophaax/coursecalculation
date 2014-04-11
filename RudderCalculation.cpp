@@ -1,16 +1,16 @@
-#include "RudderCalculation.h"
+#include "CourseCalculation.h"
 
 const double PI = 3.1415926;
 const double radiusOfEarth = 6378.1;
 
-RudderCalculation::RudderCalculation() {
+CourseCalculation::CourseCalculation() {
 	m_PREVIOUS_ITERATION_TACK = false;
 }
 
-RudderCalculation::~RudderCalculation() {
+CourseCalculation::~CourseCalculation() {
 }
 
-void RudderCalculation::radianConversion(double boatLat, double boatLong,
+void CourseCalculation::radianConversion(double boatLat, double boatLong,
 		double wpLat, double wpLong) {
 
 	m_deltaLatitudeRadians = (wpLat - boatLat) * PI / 180;
@@ -21,7 +21,7 @@ void RudderCalculation::radianConversion(double boatLat, double boatLong,
 	//m_wpLongitudeRadians = wpLong * PI / 180;
 }
 
-void RudderCalculation::calculateBWP(double boatLat, double boatLong,
+void CourseCalculation::calculateBWP(double boatLat, double boatLong,
 		double wpLat, double wpLong) {
 
 	radianConversion(boatLat, boatLong, wpLat, wpLong);
@@ -41,7 +41,7 @@ void RudderCalculation::calculateBWP(double boatLat, double boatLong,
 	this->m_BWP = bwp;
 }
 
-void RudderCalculation::calculateDWP(double boatLat, double boatLong,
+void CourseCalculation::calculateDWP(double boatLat, double boatLong,
 		double wpLat, double wpLong) {
 
 	radianConversion(boatLat, boatLong, wpLat, wpLong);
@@ -57,7 +57,7 @@ void RudderCalculation::calculateDWP(double boatLat, double boatLong,
 	this->m_DWP = d;
 }
 
-int RudderCalculation::determineFirstCTS() {
+int CourseCalculation::determineFirstCTS() {
 
 	int cts;
 	int port = countDown();
@@ -76,7 +76,7 @@ int RudderCalculation::determineFirstCTS() {
 	return cts;
 }
 
-bool RudderCalculation::continuePort() {
+bool CourseCalculation::continuePort() {
 
 	int tmp_BWP = round(m_BWP);
 	int tmp_TWD = m_TWD;
@@ -107,7 +107,7 @@ bool RudderCalculation::continuePort() {
 	return continueDirection;
 }
 
-bool RudderCalculation::continueStarboard() {
+bool CourseCalculation::continueStarboard() {
 
 	int tmp_BWP = round(m_BWP);
 	int tmp_TWD = m_TWD;
@@ -137,7 +137,7 @@ bool RudderCalculation::continueStarboard() {
 	return continueDirection;
 }
 
-double RudderCalculation::calculateStarboardCTS() {
+double CourseCalculation::calculateStarboardCTS() {
 
 	double cts;
 
@@ -150,7 +150,7 @@ double RudderCalculation::calculateStarboardCTS() {
 	return cts;
 }
 
-double RudderCalculation::calculatePortCTS() {
+double CourseCalculation::calculatePortCTS() {
 
 	double cts;
 
@@ -162,7 +162,7 @@ double RudderCalculation::calculatePortCTS() {
 	return cts;
 }
 
-void RudderCalculation::calculateCTS() {
+void CourseCalculation::calculateCTS() {
 
 	double cts;
 
@@ -217,7 +217,7 @@ void RudderCalculation::calculateCTS() {
 
 }
 
-int RudderCalculation::countUp() {
+int CourseCalculation::countUp() {
 
 	int count = 0;
 	int tmp_BWP = round(m_BWP);
@@ -242,7 +242,7 @@ int RudderCalculation::countUp() {
 	return count;
 }
 
-int RudderCalculation::countDown() {
+int CourseCalculation::countDown() {
 
 	int count = 0;
 	int tmp_BWP = round(m_BWP);
@@ -267,7 +267,7 @@ int RudderCalculation::countDown() {
 	return count;
 }
 
-bool RudderCalculation::calcUp() {
+bool CourseCalculation::calcUp() {
 
 	int tmp_TWD = m_TWD;
 	int tmp_BWP = round(m_BWP);
@@ -291,7 +291,7 @@ bool RudderCalculation::calcUp() {
 	return tack;
 }
 
-bool RudderCalculation::calcDown() {
+bool CourseCalculation::calcDown() {
 
 	int tmp_TWD = m_TWD;
 	int tmp_BWP = round(m_BWP);
@@ -314,7 +314,7 @@ bool RudderCalculation::calcDown() {
 	return tack;
 }
 
-bool RudderCalculation::calculateTACK() {
+bool CourseCalculation::calculateTACK() {
 
 	if (calcUp() || calcDown()) {
 		m_TACK = true;
@@ -327,43 +327,43 @@ bool RudderCalculation::calculateTACK() {
 	return m_TACK;
 }
 
-void RudderCalculation::setTWD(double degrees) {
+void CourseCalculation::setTWD(double degrees) {
 	this->m_TWD = degrees;
 }
 
-void RudderCalculation::setBWP(double degrees) {
+void CourseCalculation::setBWP(double degrees) {
 	this->m_BWP = degrees;
 }
 
-void RudderCalculation::setTACK_ANGLE(double degrees) {
+void CourseCalculation::setTACK_ANGLE(double degrees) {
 	this->m_TACK_ANGLE = degrees;
 }
 
-void RudderCalculation::setSECTOR_ANGLE(double degrees) {
+void CourseCalculation::setSECTOR_ANGLE(double degrees) {
 	this->m_SECTOR_ANGLE = degrees;
 }
 
-double RudderCalculation::getCTS() {
+double CourseCalculation::getCTS() {
 
 	return m_CTS;
 }
 
-double RudderCalculation::getBWP() {
+double CourseCalculation::getBWP() {
 
 	return m_BWP;
 }
 
-double RudderCalculation::getDWP() {
+double CourseCalculation::getDWP() {
 
 	return m_DWP;
 }
 
-double RudderCalculation::getTWD() {
+double CourseCalculation::getTWD() {
 
 	return m_TWD;
 }
 
-bool RudderCalculation::getTACK() {
+bool CourseCalculation::getTACK() {
 
 	return m_TACK;
 }

@@ -1,9 +1,10 @@
-#include "RudderCalculation.h"
+#include "CourseCalculation.h"
 #include <unistd.h>
+#include <iostream>
 
 int main() {
 
-	RudderCalculation rc;
+	CourseCalculation rc;
 
 	double boatLat = 0;
 	double boatLong = 0;
