@@ -10,88 +10,90 @@ CourseCalculation::CourseCalculation() {
 CourseCalculation::~CourseCalculation() {
 }
 
-void CourseCalculation::radianConversion(double boatLat, double boatLong,
-		double wpLat, double wpLong) {
+void CourseCalculation::decimalToRadian(double boatLongitude, double boatLatitude, 
+									double waypointLongitude, double waypointLatitude) {
 
-	m_deltaLatitudeRadians = (wpLat - boatLat) * PI / 180;
-	m_deltaLongitudeRadians = (wpLong - boatLong) * PI / 180;
-	m_latitudeRadians = boatLat * PI / 180;
-	m_wpLatitudeRadians = wpLat * PI / 180;
-	//m_longitudeRadians = boatLat * PI / 180;
-	//m_wpLongitudeRadians = wpLong * PI / 180;
+	m_deltaLatitudeRadians = (waypointLatitude - boatLatitude) * PI / 180;
+	m_deltaLongitudeRadians = (waypointLongitude - boatLongitude) * PI / 180;
+
+	m_boatLatitudeInRadian = boatLatitude * PI / 180;
+	m_waypointLatitudeInRadian = waypointLatitude * PI / 180;
+
 }
 
-void CourseCalculation::calculateBWP(double boatLat, double boatLong,
-		double wpLat, double wpLong) {
+void CourseCalculation::calculateBTW(double boatLongitude, double boatLatitude,
+									double waypointLongitude, double waypointLatitude) {
 
-	radianConversion(boatLat, boatLong, wpLat, wpLong);
+	decimalToRadian(boatLongitude, boatLatitude,waypointLongitude, waypointLatitude);
 
-	double y = sin(m_deltaLongitudeRadians) * cos(m_wpLatitudeRadians);
-	double x = cos(m_latitudeRadians) * sin(m_wpLatitudeRadians)
-			- sin(m_latitudeRadians) * cos(m_wpLatitudeRadians)
-					* cos(m_deltaLongitudeRadians);
+	double y_coordinate = sin(m_deltaLongitudeRadians) 
+						* cos(m_waypointLatitudeInRadian);
 
-	double bwp = atan2(y, x) / PI * 180;
+	double x_coordinate = cos(m_boatLatitudeInRadian) 
+						* sin(m_waypointLatitudeInRadian)
+						- sin(m_boatLatitudeInRadian) 
+						* cos(m_waypointLatitudeInRadian)
+						* cos(m_deltaLongitudeRadians);
 
-	if (bwp < 0) {
+	double bearingToWaypoint = atan2(y_coordinate, x_coordinate) / PI * 180;
 
-		bwp = 360 + bwp;
-	}
+		if (bearingToWaypoint < 0) {
+			bearingToWaypoint = 360 + bearingToWaypoint;
+		}
 
-	this->m_BWP = bwp;
+	this->m_bearingToWaypoint = bearingToWaypoint;
 }
 
-void CourseCalculation::calculateDWP(double boatLat, double boatLong,
-		double wpLat, double wpLong) {
+void CourseCalculation::calculateDTW(double boatLongitude, double boatLatitude, 
+									double waypointLongitude, double waypointLatitude) {
 
-	radianConversion(boatLat, boatLong, wpLat, wpLong);
+	decimalToRadian(boatLongitude, boatLatitude, waypointLongitude, waypointLatitude);
 
-	double a = sin(m_deltaLatitudeRadians / 2) * sin(m_deltaLatitudeRadians / 2)
-			+ sin(m_deltaLongitudeRadians / 2)
-					* sin(m_deltaLongitudeRadians / 2) * cos(m_latitudeRadians)
-					* cos(m_wpLatitudeRadians);
-	double c = 2 * atan2(sqrt(a), sqrt(1 - a));
-	double d = radiusOfEarth * c;
-	d = d * 1000;
+	double a = sin(m_deltaLatitudeRadians / 2) 
+				* sin(m_deltaLatitudeRadians / 2)
+				+ sin(m_deltaLongitudeRadians / 2)
+				* sin(m_deltaLongitudeRadians / 2) 
+				* cos(m_boatLatitudeInRadian)
+				* cos(m_waypointLatitudeInRadian);
 
-	this->m_DWP = d;
+	double b = 2 * atan2(sqrt(a), sqrt(1 - a));
+	double distanceToWaypoint = radiusOfEarth * b * 1000;
+
+	this->m_distanceToWaypoint = distanceToWaypoint;
 }
 
 int CourseCalculation::determineFirstCTS() {
 
-	int cts;
+	int courseToSteer;
 	int port = countDown();
 	int starboard = countUp();
 
 	if (port > starboard) {
-		cts = calculatePortCTS();
+		courseToSteer = calculatePortCTS();
 		m_GOING_STARBOARD = false;
-	}
-
+	} 
 	else if (starboard >= port) {
-		cts = calculateStarboardCTS();
+		courseToSteer = calculateStarboardCTS();
 		m_GOING_STARBOARD = true;
 	}
 
-	return cts;
+	return courseToSteer;
 }
 
 bool CourseCalculation::continuePort() {
 
-	int tmp_BWP = round(m_BWP);
+	int tmp_BWP = round(m_bearingToWaypoint);
 	int tmp_TWD = m_TWD;
 	bool continueDirection = false;
 	int sectorBegin = tmp_TWD - m_TACK_ANGLE;
 
 	if (sectorBegin < 0) {
-
 		sectorBegin += 360;
 	}
 
 	for (int i = 0; i < (m_TACK_ANGLE + m_SECTOR_ANGLE); i++) {
 
 		if (tmp_BWP == sectorBegin) {
-
 			continueDirection = true;
 			break;
 		}
@@ -99,7 +101,6 @@ bool CourseCalculation::continuePort() {
 		sectorBegin++;
 
 		if (sectorBegin == 360) {
-
 			sectorBegin = 0;
 		}
 	}
@@ -109,7 +110,7 @@ bool CourseCalculation::continuePort() {
 
 bool CourseCalculation::continueStarboard() {
 
-	int tmp_BWP = round(m_BWP);
+	int tmp_BWP = round(m_bearingToWaypoint);
 	int tmp_TWD = m_TWD;
 	bool continueDirection = false;
 	int sectorBegin = tmp_TWD + m_TACK_ANGLE;
@@ -209,7 +210,7 @@ void CourseCalculation::calculateCTS() {
 
 	else {
 		// We are not going against the wind direction
-		cts = m_BWP;
+		cts = m_bearingToWaypoint;
 	}
 
 	m_CTS = cts;
@@ -220,7 +221,7 @@ void CourseCalculation::calculateCTS() {
 int CourseCalculation::countUp() {
 
 	int count = 0;
-	int tmp_BWP = round(m_BWP);
+	int tmp_BWP = round(m_bearingToWaypoint);
 	int tmp_TWD = m_TWD;
 	bool go = true;
 
@@ -245,7 +246,7 @@ int CourseCalculation::countUp() {
 int CourseCalculation::countDown() {
 
 	int count = 0;
-	int tmp_BWP = round(m_BWP);
+	int tmp_BWP = round(m_bearingToWaypoint);
 	int tmp_TWD = m_TWD;
 	bool go = true;
 
@@ -270,7 +271,7 @@ int CourseCalculation::countDown() {
 bool CourseCalculation::calcUp() {
 
 	int tmp_TWD = m_TWD;
-	int tmp_BWP = round(m_BWP);
+	int tmp_BWP = round(m_bearingToWaypoint);
 
 	bool tack = false;
 
@@ -294,7 +295,7 @@ bool CourseCalculation::calcUp() {
 bool CourseCalculation::calcDown() {
 
 	int tmp_TWD = m_TWD;
-	int tmp_BWP = round(m_BWP);
+	int tmp_BWP = round(m_bearingToWaypoint);
 	bool tack = false;
 
 	for (int i = 0; i < m_TACK_ANGLE; i++) {
@@ -331,8 +332,8 @@ void CourseCalculation::setTWD(double degrees) {
 	this->m_TWD = degrees;
 }
 
-void CourseCalculation::setBWP(double degrees) {
-	this->m_BWP = degrees;
+void CourseCalculation::setBTW(double degrees) {
+	this->m_bearingToWaypoint = degrees;
 }
 
 void CourseCalculation::setTACK_ANGLE(double degrees) {
@@ -344,26 +345,21 @@ void CourseCalculation::setSECTOR_ANGLE(double degrees) {
 }
 
 double CourseCalculation::getCTS() {
-
 	return m_CTS;
 }
 
-double CourseCalculation::getBWP() {
-
-	return m_BWP;
+double CourseCalculation::getBTW() {
+	return m_bearingToWaypoint;
 }
 
-double CourseCalculation::getDWP() {
-
-	return m_DWP;
+double CourseCalculation::getDTW() {
+	return m_distanceToWaypoint;
 }
 
 double CourseCalculation::getTWD() {
-
 	return m_TWD;
 }
 
 bool CourseCalculation::getTACK() {
-
 	return m_TACK;
 }

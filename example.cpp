@@ -4,29 +4,29 @@
 
 int main() {
 
-	CourseCalculation rc;
+	CourseCalculation cc;
 
-	double boatLat = 0;
-	double boatLong = 0;
+	double boatLat = 5.2121;
+	double boatLong = 145.2322;
 	double waypointLat = 10;
-	double waypointLong = 0;
+	double waypointLong = 60.123;
 
-	rc.setTACK_ANGLE(45);
-	rc.setSECTOR_ANGLE(5);
-	rc.setTWD(5);
+	cc.setTACK_ANGLE(45);
+	cc.setSECTOR_ANGLE(5);
+	cc.setTWD(5);
 
 	while (true) {
 
-		rc.calculateBWP(boatLat, boatLong, waypointLat, waypointLong);
-		rc.calculateDWP(boatLat, boatLong, waypointLat, waypointLong);
-		rc.calculateCTS();
+		cc.calculateBTW(boatLat, boatLong, waypointLat, waypointLong);
+		cc.calculateDTW(boatLat, boatLong, waypointLat, waypointLong);
+		cc.calculateCTS();
 
 		std::cout << "--------------------" << std::endl;
-		std::cout << "TWD: 	" << rc.getTWD() << std::endl;
-		std::cout << "BWP: 	" << rc.getBWP() << std::endl;
-		std::cout << "TACK: 	" << rc.getTACK() << std::endl;
-		std::cout << "DWP: 	" << rc.getDWP() << std::endl;
-		std::cout << "CTS: 	" << rc.getCTS() << std::endl;
+		std::cout << "TWD: 	" << cc.getTWD() << std::endl;
+		std::cout << "BTW: 	" << cc.getBTW() << std::endl;
+		std::cout << "TACK: " << cc.getTACK() << std::endl;
+		std::cout << "DTW: 	" << cc.getDTW() << std::endl;
+		std::cout << "CTS: 	" << cc.getCTS() << std::endl;
 		std::cout << "--------------------" << std::endl;
 
 		sleep(1);
