@@ -1,4 +1,5 @@
 #include "CourseCalculation.h"
+#include <iostream>
 
 const double PI = 3.1415926;
 const double radiusOfEarth = 6378.1;
@@ -57,7 +58,12 @@ void CourseCalculation::calculateDTW(double boatLongitude, double boatLatitude,
 				* cos(m_waypointLatitudeInRadian);
 
 	double b = 2 * atan2(sqrt(a), sqrt(1 - a));
-	double distanceToWaypoint = radiusOfEarth * b * 1000;
+	std::cout << b << std::endl;
+	double distanceToWaypoint = radiusOfEarth * b;
+	//distanceToWaypoint = distanceToWaypoint * 1000;
+	double test = distanceToWaypoint * 1000;
+	std::cout << distanceToWaypoint << std::endl;
+	std::cout << test << "test" << std::endl;
 
 	this->m_distanceToWaypoint = distanceToWaypoint;
 }
