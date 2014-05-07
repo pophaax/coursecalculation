@@ -12,10 +12,6 @@ int main() {
 	double waypointLats [5] 	= {63.234, 42.53, 66.22, 90.34, 120.42};
 	double waypointLongs [5] 	= {12.41, 42.52, 88.22, 54.52, 39.52};
 
-	double boatLat = 5.2121;
-	double boatLong = 145.2322;
-	double waypointLat = 10;
-	double waypointLong = 60.123;
 
 	cc.setTACK_ANGLE(45);
 	cc.setSECTOR_ANGLE(5);
