@@ -21,6 +21,6 @@ all : $(FILE)
 $(FILE) : $(SOURCES) $(HEADERS)
 	$(CC) $(SOURCES) $(FLAGS) $(LIBS) -c -o $(FILE)
 
-example : $(SOURCES) $(HEADERS)
+example : $(SOURCES) $(HEADERS) example.cpp
 	$(CC) $(SOURCES) example.cpp $(FLAGS) $(LIBS) -o example
 
