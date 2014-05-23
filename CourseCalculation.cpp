@@ -2,7 +2,7 @@
 #include <iostream>
 
 const double PI = 3.1415926;
-const double radiusOfEarth = 6371;
+const double radiusOfEarth = 6371.0;
 const double radDegree = 180.0;
 
 CourseCalculation::CourseCalculation() {
@@ -113,7 +113,6 @@ bool CourseCalculation::continueStarboard() {
 	int sectorBegin = tmp_TWD + m_TACK_ANGLE;
 
 	if (sectorBegin >= 360) {
-
 		sectorBegin -= 360;
 	}
 
