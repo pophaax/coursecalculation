@@ -90,7 +90,7 @@ public:
 	~CourseCalculation();
 
 	/* Calculates the bearing to waypoint angle using the boat's coordinates and the waypoint's coordinates */
-	void calculateBTW(double boatLong, double boatLat, double wpLong, double wpLat);
+	void calculateBTW(double boatLat, double boatLong, double wpLat, double wpLong);
 
 	/* Calculates the distance in meters to waypoint using the boat's coordinates and the waypoint's coordinates */
 	void calculateDTW(double boatLat, double boatLong, double wpLat, double wpLong);

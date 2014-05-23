@@ -3,6 +3,7 @@
 
 const double PI = 3.1415926;
 const double radiusOfEarth = 6371;
+const double radDegree = 180.0;
 
 CourseCalculation::CourseCalculation() {
 	m_PREVIOUS_ITERATION_TACK = false;
@@ -11,26 +12,26 @@ CourseCalculation::CourseCalculation() {
 CourseCalculation::~CourseCalculation() {
 }
 
-void CourseCalculation::decimalToRadian(double boatLatitude, double boatLongitude, 
-									double waypointLatitude, double waypointLongitude) {
+void CourseCalculation::decimalToRadian(double boatLat, double boatLong, double wpLat, double wpLong) {
 
-	m_deltaLatitudeRadians = (waypointLatitude - boatLatitude) * PI / 180.0;
-	m_deltaLongitudeRadians = (waypointLongitude - boatLongitude) * PI / 180.0;
-
-	m_boatLatitudeInRadian = boatLatitude * PI / 180.0;
-	m_waypointLatitudeInRadian = waypointLatitude * PI / 180.0;
+	m_deltaLatitudeRadians 	= (wpLat-boatLat)*PI/radDegree;
+	m_deltaLongitudeRadians = (wpLong-boatLong)*PI/radDegree;
+	m_boatLatitudeInRadian 	= boatLat*PI/radDegree;
+	m_waypointLatitudeInRadian = wpLat*PI/radDegree;
 }
 
-void CourseCalculation::calculateBTW(double boatLatitude, double boatLongitude,
-									double waypointLatitude, double waypointLongitude) {
+void CourseCalculation::calculateBTW(double boatLat, double boatLong, double wpLat, double wpLong) {
 
-	decimalToRadian(boatLongitude, boatLatitude,waypointLongitude, waypointLatitude);
+	decimalToRadian(boatLat, boatLong, wpLat, wpLong);
 
-		double y_coordinate = sin(m_deltaLongitudeRadians) * cos(m_waypointLatitudeInRadian);
+		double y_coordinate = sin(m_deltaLongitudeRadians)
+							* cos(m_waypointLatitudeInRadian);
 
-		double x_coordinate = cos(m_boatLatitudeInRadian) * sin(m_waypointLatitudeInRadian)
-						- sin(m_boatLatitudeInRadian) * cos(m_waypointLatitudeInRadian)
-						* cos(m_deltaLongitudeRadians);
+		double x_coordinate = cos(m_boatLatitudeInRadian)
+							* sin(m_waypointLatitudeInRadian)
+							- sin(m_boatLatitudeInRadian)
+							* cos(m_waypointLatitudeInRadian)
+							* cos(m_deltaLongitudeRadians);
 
 		double bearingToWaypoint = atan2(y_coordinate, x_coordinate) / PI * 180;
 
@@ -41,14 +42,16 @@ void CourseCalculation::calculateBTW(double boatLatitude, double boatLongitude,
 	this->m_bearingToWaypoint = bearingToWaypoint;
 }
 
-void CourseCalculation::calculateDTW(double boatLatitude, double boatLongitude, 
-									double waypointLatitude, double waypointLongitude) {
+void CourseCalculation::calculateDTW(double boatLat, double boatLong, double wpLat, double wpLong) {
 
-	decimalToRadian(boatLatitude, boatLongitude, waypointLatitude, waypointLongitude);
+	decimalToRadian(boatLat, boatLong, wpLat, wpLong);
 
-		double a = sin(m_deltaLatitudeRadians / 2) * sin(m_deltaLatitudeRadians / 2)
-					+ cos(m_boatLatitudeInRadian) * cos(m_waypointLatitudeInRadian)
-					* sin(m_deltaLongitudeRadians / 2) * sin(m_deltaLongitudeRadians / 2); 			
+		double a = sin(m_deltaLatitudeRadians/2)
+				* sin(m_deltaLatitudeRadians/2)
+				+ cos(m_boatLatitudeInRadian)
+				* cos(m_waypointLatitudeInRadian)
+				* sin(m_deltaLongitudeRadians/2)
+				* sin(m_deltaLongitudeRadians/2); 			
 
 		double b = 2 * atan2(sqrt(a), sqrt(1 - a));
 		double distanceToWaypoint = radiusOfEarth * b * 1000;
