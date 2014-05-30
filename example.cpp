@@ -14,12 +14,13 @@ int main() {
 
 	cc.setTACK_ANGLE(45);
 	cc.setSECTOR_ANGLE(5);
-	cc.setTWD(68);
+	cc.setTWD(250);
 
 	for(int i = 0; i < 3; i++) {
 
 		cc.calculateBTW(boatLats[i], boatLongs[i], waypointLats[i], waypointLongs[i]);
 		cc.calculateDTW(boatLats[i], boatLongs[i], waypointLats[i], waypointLongs[i]);
+		
 		cc.calculateCTS();
 
 		std::cout << "--------------------" << std::endl;
@@ -35,6 +36,6 @@ int main() {
 		std::cout << "CTS:____________:" << cc.getCTS() << std::endl;
 		std::cout << "--------------------" << std::endl;
 
-		sleep(1);
+		//sleep(1);
 	}
 }

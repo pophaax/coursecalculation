@@ -61,18 +61,18 @@ void CourseCalculation::calculateDTW(double boatLat, double boatLong, double wpL
 
 int CourseCalculation::determineFirstCTS() {
 
-	int courseToSteer;
+	int courseToSteer = 0;
 	int port = countDown();
 	int starboard = countUp();
 
-	if (port > starboard) {
-		courseToSteer = calculatePortCTS();
-		m_GOING_STARBOARD = false;
-	} 
-	else if (starboard >= port) {
-		courseToSteer = calculateStarboardCTS();
-		m_GOING_STARBOARD = true;
-	}
+		if (port > starboard) {
+			courseToSteer = calculatePortCTS();
+			m_GOING_STARBOARD = false;
+		} 
+		else if (starboard >= port) {
+			courseToSteer = calculateStarboardCTS();
+			m_GOING_STARBOARD = true;
+		}
 
 	return courseToSteer;
 }
@@ -81,133 +81,119 @@ bool CourseCalculation::continuePort() {
 
 	int tmp_BWP = round(m_bearingToWaypoint);
 	int tmp_TWD = m_TWD;
-	bool continueDirection = false;
 	int sectorBegin = tmp_TWD - m_TACK_ANGLE;
+	bool continueDirection = false;
 
 	if (sectorBegin < 0) {
 		sectorBegin += 360;
 	}
 
-	for (int i = 0; i < (m_TACK_ANGLE + m_SECTOR_ANGLE); i++) {
+		for (int i = 0; i < (m_TACK_ANGLE + m_SECTOR_ANGLE); i++) {
 
-		if (tmp_BWP == sectorBegin) {
-			continueDirection = true;
-			break;
+			if (tmp_BWP == sectorBegin) {
+				continueDirection = true;
+				break;
+			}
+
+			sectorBegin++;
+				if (sectorBegin == 360) {
+					sectorBegin = 0;
+				}
 		}
-
-		sectorBegin++;
-
-		if (sectorBegin == 360) {
-			sectorBegin = 0;
-		}
-	}
-
 	return continueDirection;
 }
 
 bool CourseCalculation::continueStarboard() {
 
 	int tmp_BWP = round(m_bearingToWaypoint);
-	int tmp_TWD = m_TWD;
-	bool continueDirection = false;
+	int tmp_TWD = m_TWD;	
 	int sectorBegin = tmp_TWD + m_TACK_ANGLE;
+	bool continueDirection = false;
 
 	if (sectorBegin >= 360) {
 		sectorBegin -= 360;
 	}
 
-	for (int i = 0; i < (m_TACK_ANGLE + m_SECTOR_ANGLE); i++) {
+		for (int i = 0; i < (m_TACK_ANGLE + m_SECTOR_ANGLE); i++) {
 
-		if (tmp_BWP == sectorBegin) {
-			continueDirection = true;
-			break;
+			if (tmp_BWP == sectorBegin) {
+				continueDirection = true;
+				break;
+			}
+
+			sectorBegin--;
+				if (sectorBegin == -1) {
+					sectorBegin = 359;
+				}
 		}
-
-		sectorBegin--;
-
-		if (sectorBegin == -1) {
-
-			sectorBegin = 359;
-		}
-	}
-
 	return continueDirection;
 }
 
 double CourseCalculation::calculateStarboardCTS() {
 
-	double cts;
+	double starboardCTS = 0;
 
-	if (m_TWD + m_TACK_ANGLE > 360) {
-		cts = m_TWD + m_TACK_ANGLE - 360;
-	} else {
-		cts = m_TWD + m_TACK_ANGLE;
-	}
-
-	return cts;
+		if (m_TWD + m_TACK_ANGLE > 360) {
+			starboardCTS = m_TWD + m_TACK_ANGLE - 360;
+		} else {
+			starboardCTS = m_TWD + m_TACK_ANGLE;
+		}
+	return starboardCTS;
 }
 
 double CourseCalculation::calculatePortCTS() {
 
-	double cts;
+	double portCTS = 0;
 
-	if (m_TWD - m_TACK_ANGLE < 0) {
-		cts = m_TWD - m_TACK_ANGLE + 360;
-	} else {
-		cts = m_TWD - m_TACK_ANGLE;
-	}
-	return cts;
+		if (m_TWD - m_TACK_ANGLE < 0) {
+			portCTS = m_TWD - m_TACK_ANGLE + 360;
+		} else {
+			portCTS = m_TWD - m_TACK_ANGLE;
+		}
+	return portCTS;
 }
 
 void CourseCalculation::calculateCTS() {
 
-	double cts;
-
+	double cts = 0;
 	calculateTACK();
 
-	if (m_TACK == true) {
-		// We are going against the wind direction
-		if (m_PREVIOUS_ITERATION_TACK == false) {
-			// We just ended up in tack position
-			cts = determineFirstCTS();
+		if (m_TACK == true) {
+			// We are going against the wind direction
+			if (m_PREVIOUS_ITERATION_TACK == false) {
+				// We just ended up in tack position
+				cts = determineFirstCTS();
+			} 
+			else {
+				// We are still in tack position
+				if (m_GOING_STARBOARD) {
+					// Wind is coming from port but we are going in starboard direction relative to the wind
+					if (!continueStarboard()) {
+						// CTS should switch to port side
+						m_GOING_STARBOARD = false;
+						cts = calculatePortCTS();
+					} else {
+						// CTS should remain about the same
+						cts = calculateStarboardCTS();
+					}
+				}
+				else if (!m_GOING_STARBOARD) {
+					// Wind is coming from starboard but we are going in port direction relative to the wind
+					if (!continuePort()) {
+						// CTS should switch to starboard side
+						m_GOING_STARBOARD = true;
+						cts = calculateStarboardCTS();
+					} else {
+						// CTS should remain about the same
+						cts = calculatePortCTS();
+					}
+				}
+			}
 		}
-
 		else {
-			// We are still in tack position
-			if (m_GOING_STARBOARD) {
-				// Wind is coming from port but we are going in starboard direction relative to the wind
-				if (!continueStarboard()) {
-					// CTS should switch to port side
-					m_GOING_STARBOARD = false;
-					cts = calculatePortCTS();
-				}
-
-				else {
-					// CTS should remain about the same
-					cts = calculateStarboardCTS();
-				}
-			}
-
-			else if (!m_GOING_STARBOARD) {
-				// Wind is coming from starboard but we are going in port direction relative to the wind
-				if (!continuePort()) {
-					// CTS should switch to starboard side
-					m_GOING_STARBOARD = true;
-					cts = calculateStarboardCTS();
-				}
-
-				else {
-					// CTS should remain about the same
-					cts = calculatePortCTS();
-				}
-			}
+			// We are not going against the wind direction
+			cts = m_bearingToWaypoint;
 		}
-	}
-
-	else {
-		// We are not going against the wind direction
-		cts = m_bearingToWaypoint;
-	}
 
 	m_CTS = cts;
 	m_PREVIOUS_ITERATION_TACK = m_TACK;
