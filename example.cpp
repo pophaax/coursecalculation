@@ -14,7 +14,7 @@ int main() {
 
 	cc.setTACK_ANGLE(45);
 	cc.setSECTOR_ANGLE(5);
-	cc.setTWD(250);
+	cc.setTWD(49);
 
 	for(int i = 0; i < 3; i++) {
 

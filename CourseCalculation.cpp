@@ -253,9 +253,13 @@ int CourseCalculation::countDown() {
 bool CourseCalculation::calcUp() {
 
 	int tmp_TWD = m_TWD;
-	int tmp_BWP = round(m_bearingToWaypoint);
+	int tmp_BWP = round(m_bearingToWaypoint) + 180;
 
 	bool tack = false;
+
+	if (tmp_BWP > 359) {
+		tmp_BWP -= 360;
+	}
 
 	for (int i = 0; i < m_TACK_ANGLE; i++) {
 
@@ -277,8 +281,12 @@ bool CourseCalculation::calcUp() {
 bool CourseCalculation::calcDown() {
 
 	int tmp_TWD = m_TWD;
-	int tmp_BWP = round(m_bearingToWaypoint);
+	int tmp_BWP = round(m_bearingToWaypoint) + 180;
 	bool tack = false;
+
+	if (tmp_BWP > 359) {
+		tmp_BWP -= 360;
+	}
 
 	for (int i = 0; i < m_TACK_ANGLE; i++) {
 
