@@ -64,7 +64,8 @@ int CourseCalculation::determineFirstCTS() {
 	int courseToSteer = 0;
 	int port = countDown();
 	int starboard = countUp();
-
+		std::cout << "port count: " << port << "\n";
+		std::cout << "sb count: " << starboard << "\n";
 		if (port > starboard) {
 			courseToSteer = calculatePortCTS();
 			m_GOING_STARBOARD = false;
@@ -134,9 +135,11 @@ double CourseCalculation::calculateStarboardCTS() {
 	double starboardCTS = 0;
 
 		if (m_TWD + m_TACK_ANGLE > 360) {
+			std::cout << "sb1\n";
 			starboardCTS = m_TWD + m_TACK_ANGLE - 360;
 		} else {
 			starboardCTS = m_TWD + m_TACK_ANGLE;
+			std::cout << "sb2\n";
 		}
 	return starboardCTS;
 }
@@ -146,8 +149,10 @@ double CourseCalculation::calculatePortCTS() {
 	double portCTS = 0;
 
 		if (m_TWD - m_TACK_ANGLE < 0) {
+			std::cout << "p1\n";
 			portCTS = m_TWD - m_TACK_ANGLE + 360;
 		} else {
+			std::cout << "p2\n";
 			portCTS = m_TWD - m_TACK_ANGLE;
 		}
 	return portCTS;
@@ -203,9 +208,13 @@ void CourseCalculation::calculateCTS() {
 int CourseCalculation::countUp() {
 
 	int count = 0;
-	int tmp_BWP = round(m_bearingToWaypoint);
+	int tmp_BWP = round(m_bearingToWaypoint) + 180;
 	int tmp_TWD = m_TWD;
 	bool go = true;
+
+	if (tmp_BWP > 359) {
+		tmp_BWP -= 360;
+	}
 
 	for (int i = 0; i < m_TACK_ANGLE && go == true; i++) {
 
@@ -228,9 +237,13 @@ int CourseCalculation::countUp() {
 int CourseCalculation::countDown() {
 
 	int count = 0;
-	int tmp_BWP = round(m_bearingToWaypoint);
+	int tmp_BWP = round(m_bearingToWaypoint) + 180;
 	int tmp_TWD = m_TWD;
 	bool go = true;
+
+	if (tmp_BWP > 359) {
+		tmp_BWP -= 360;
+	}
 
 	for (int i = 0; i < m_TACK_ANGLE && go == true; i++) {
 
