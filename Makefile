@@ -24,6 +24,11 @@ $(FILE) : $(SOURCES) $(HEADERS)
 example : $(SOURCES) $(HEADERS) example.cpp
 	$(CC) $(SOURCES) example.cpp $(FLAGS) $(LIBS) -o example
 
+test : $(SOURCES) $(HEADERS) catch.hpp testCourseCalculation.cpp
+	$(CC) $(SOURCES) testCourseCalculation.cpp $(LIBS) -o test
+
+
 clean :
 	rm -f $(FILE)
 	rm -f example
+	rm -f test
