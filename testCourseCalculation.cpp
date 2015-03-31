@@ -2,6 +2,7 @@
 #include "catch.hpp"
 #include "CourseCalculation.h"
 
+#include <iostream>
 
 TEST_CASE("CourseCalculationTest")
 {
@@ -53,6 +54,29 @@ TEST_CASE("CourseCalculationTest")
 				REQUIRE(cc.getCTS() == cc.getBTW());
 				REQUIRE_FALSE(cc.getTACK());
 			}				
+		}
+	}
+
+
+	SECTION("Test calculateDTW with 3 different poisitions for waypoint and boat")
+	{
+   		const int noOfPositions = 3;
+		double boatLats [3] 		= {60.836881, 60.073063, 59.539888 };
+		double boatLongs [3] 		= {19.143219, 22.185974, 19.894409 };
+		double waypointLats [3] 	= {60.103333, 60.103172, 60.103362 };
+		double waypointLongs [3] 	= {19.928306, 19.92834, 19.928601 };
+
+		/* Resulting distance between boat and waypont in meters.
+		 * Taken from http://www.movable-type.co.uk/scripts/latlong.html 
+		 */
+		const double result_distance[3] = { 92218.1699654549,
+										    125222.8858237675,
+										    62684.5898278684 };
+		CourseCalculation cc;
+
+		for(int i = 0; i < noOfPositions; i++) {
+			cc.calculateDTW(boatLats[i], boatLongs[i], waypointLats[i], waypointLongs[i]);
+			REQUIRE(std::fabs(result_distance[i] - cc.getDTW()) < 0.1);
 		}
 	}
 }
