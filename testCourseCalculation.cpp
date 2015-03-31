@@ -56,7 +56,7 @@ TEST_CASE("CourseCalculationTest")
 	}
 
 
-	SECTION("Test calculateDTW with 3 different poisitions for waypoint and boat")
+	SECTION("Test calculateDTW with 3 different positions for waypoint and boat")
 	{
 		const int noOfDTW = 3;
 		double boatLats [3] 		= {60.836881, 60.073063, 59.539888 };
@@ -76,7 +76,7 @@ TEST_CASE("CourseCalculationTest")
 		}
 	}
 
-	SECTION("Test calculateBTW with 3 different poisitions for waypoint and boat")
+	SECTION("Test calculateBTW with 3 different positions for waypoint and boat")
 	{
 		const int noOfBTW = 3;
 		double boatLats [3] 		= {60.836881, 60.073063, 59.539888 };
