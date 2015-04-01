@@ -72,7 +72,7 @@ TEST_CASE("CourseCalculationTest")
 		CourseCalculation cc;
 		for(int i = 0; i < noOfDTW; i++) {
 			cc.calculateDTW(boatLats[i], boatLongs[i], waypointLats[i], waypointLongs[i]);
-			REQUIRE(std::fabs(result_distance[i] - cc.getDTW()) < 0.001);
+			REQUIRE(result_distance[i] == Approx(cc.getDTW()));
 		}
 	}
 
@@ -92,7 +92,7 @@ TEST_CASE("CourseCalculationTest")
 		CourseCalculation cc;
 		for(int i = 0; i < noOfBTW; i++) {
 			cc.calculateBTW(boatLats[i], boatLongs[i], waypointLats[i], waypointLongs[i]);
-			REQUIRE(std::fabs(result_bearing[i] - cc.getBTW()) < 0.001);
+			REQUIRE(result_bearing[i] == Approx(cc.getBTW()));
 		}
 	}
 }
