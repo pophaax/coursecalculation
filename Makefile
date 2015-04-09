@@ -27,8 +27,23 @@ example : $(SOURCES) $(HEADERS) example.cpp
 test : $(SOURCES) $(HEADERS) ../catch.hpp testCourseCalculation.cpp
 	$(CC) $(SOURCES) testCourseCalculation.cpp $(LIBS) -o test
 
+metatest : $(SOURCES) $(HEADERS) ../catch.hpp testCourseCalculation.cpp
+	$(CC) $(SOURCES) testCourseCalculation.cpp -fprofile-arcs -ftest-coverage $(LIBS) -o metatest 
+
 
 clean :
-	rm -f $(FILE)
+	rm -f $(FILES)
 	rm -f example
 	rm -f test
+	rm -f metatest
+	rm -f *.gcda
+	rm -f *.gcno
+
+metalog :
+	make metatest
+	./metatest
+	gcov -r CourseCalculation.cpp
+	grep -wE "(#####)" CourseCalculation.cpp.gcov > metatestlog.txt
+	rm -f *.gcov
+	make clean
+	sed -i '1s/^/Codelines below not tested by test*.cpp\n/' metatestlog.txt
