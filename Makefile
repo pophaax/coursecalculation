@@ -8,7 +8,7 @@
 #######################################################
 
 CC = g++
-FLAGS = -Wall -pedantic -Werror
+FLAGS = -Wall -pedantic -Werror -std=c++14
 LIBS =
 
 SOURCES = CourseCalculation.cpp
