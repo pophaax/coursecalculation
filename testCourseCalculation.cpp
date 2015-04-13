@@ -1,17 +1,18 @@
 #define CATCH_CONFIG_MAIN
 #include "../catch.hpp"
 #include "CourseCalculation.h"
+#include <iostream>
 
 TEST_CASE("CourseCalculationTest")
 {
 	SECTION("Test CTS is BTW unless course is within TACK_ANGLE degrees from TWD, if not tack")
 	{
 		CourseCalculation cc;
-
-		double boatLats [3] 		= {60.836881, 60.073063, 59.539888 };
-		double boatLongs [3] 		= {19.143219, 22.185974, 19.894409};
-		double waypointLats [3] 	= {60.103333, 60.103172, 60.103362};
-		double waypointLongs [3] 	= {19.928306, 19.92834, 19.928601};
+		int arrSize = 6;
+		double boatLats [] 		= {60.836881, 60.073063, 60.073063, 59.539888, 59.539888, 60.073063 };
+		double boatLongs [] 		= {19.143219, 22.185974, 22.185974, 19.894409, 19.894409, 22.185974};
+		double waypointLats [] 	= {60.103333, 60.103172, 60.103172, 60.103362, 60.103362, 60.103172};
+		double waypointLongs [] 	= {19.928306, 19.92834, 19.92834, 19.928601, 19.928601, 19.92834};
 
 		const int tack_angle = 45;
 		const int sector_angle = 5;
@@ -25,7 +26,7 @@ TEST_CASE("CourseCalculationTest")
 		const double max_within_value = cc.getTWD() + tack_angle;
 
 
-		for(int i = 0; i < 3; i++) {
+		for(int i = 0; i < arrSize; i++) {
 			cc.calculateBTW(boatLats[i], boatLongs[i], waypointLats[i], waypointLongs[i]);
 			cc.calculateDTW(boatLats[i], boatLongs[i], waypointLats[i], waypointLongs[i]);
 			
@@ -96,3 +97,25 @@ TEST_CASE("CourseCalculationTest")
 		}
 	}
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
