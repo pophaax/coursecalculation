@@ -1,5 +1,5 @@
 #include "CourseCalculation.h"
-#include <iostream>
+#include <math.h>
 
 const double PI = 3.1415926;
 const double radiusOfEarth = 6371.0;

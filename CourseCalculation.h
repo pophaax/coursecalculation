@@ -1,8 +1,6 @@
 #ifndef __COURSECALCULATION_H__
 #define __COURSECALCULATION_H__
 
-#include <math.h>
-
 
 class CourseCalculation {
 
