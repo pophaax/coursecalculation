@@ -123,6 +123,7 @@ public:
 	/* Gets wheter the boat has to tack */
 	bool getTACK();
 
+	bool getGOING_STARBOARD();
 };
 
 #endif

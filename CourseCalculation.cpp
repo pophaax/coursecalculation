@@ -344,3 +344,8 @@ double CourseCalculation::getTWD() {
 bool CourseCalculation::getTACK() {
 	return m_TACK;
 }
+
+bool CourseCalculation::getGOING_STARBOARD() {
+	return m_GOING_STARBOARD;
+}
+
