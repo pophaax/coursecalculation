@@ -3,16 +3,14 @@
 
 double CourseMath::limitAngleRange(double angle) const
 {
-	double fullRevolution = 360;
-	double minAngle = 0;
+	const double fullRevolution = 360;
+	const double minAngle = 0;
 
-	if (angle < minAngle) {
-		while (angle < minAngle)
-			angle += fullRevolution;
-	} else if (angle >= minAngle + fullRevolution) {
-		while (angle >= minAngle + fullRevolution)
-			angle -= fullRevolution;
-	}
+	while (angle < minAngle)
+		angle += fullRevolution;
+
+	while (angle >= minAngle + fullRevolution)
+		angle -= fullRevolution;
 
 	return angle;
 }
@@ -48,9 +46,7 @@ double CourseMath::calculateBTW(const PositionModel boat, const PositionModel wa
 	double bearingToWaypointInRadian = atan2(y_coordinate, x_coordinate);
 	double bearingToWaypoint = radianToDegree(bearingToWaypointInRadian);
 
-	if (bearingToWaypoint < 0) {
-		bearingToWaypoint = 360 + bearingToWaypoint;
-	}
+	bearingToWaypoint = limitAngleRange(bearingToWaypoint);
 
 	return bearingToWaypoint;
 }
