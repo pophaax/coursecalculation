@@ -11,31 +11,22 @@ CC = g++
 FLAGS = -Wall -pedantic -Werror -std=c++14
 LIBS =
 
-SOURCES = CourseCalculation.cpp
-HEADERS = CourseCalculation.h
-FILE = CourseCalculation.o
+SOURCES_CC = CourseCalculation.cpp
+HEADERS_CC = CourseCalculation.h
+FILE_CC = CourseCalculation.o
+
+SOURCES_CM = CourseMath.cpp
+HEADERS_CM = CourseMath.h
+FILE_CM = CourseMath.o
 
 
+all : $(FILE_CC) $(FILE_CM)
 
-all : $(FILE)
-$(FILE) : $(SOURCES) $(HEADERS)
-	$(CC) $(SOURCES) $(FLAGS) $(LIBS) -c -o $(FILE)
+$(FILE_CC) : $(SOURCES_CC) $(HEADERS_CC)
+	$(CC) $(SOURCES_CC) $(FLAGS) $(LIBS) -c -o $(FILE_CC)
 
-metatest : $(SOURCES) $(HEADERS) $(SAILINGROBOTS_HOME)/tests/catch.hpp $(SAILINGROBOTS_HOME)/tests/testsuite/testCourseCalculation.cpp
-	$(CC) $(SOURCES) $(SAILINGROBOTS_HOME)/tests/testsuite/testCourseCalculation.cpp -fprofile-arcs -ftest-coverage $(LIBS) -o metatest 
-
+$(FILE_CM) : $(SOURCES_CM) $(HEADERS_CM)
+	$(CC) $(SOURCES_CM) $(FLAGS) $(LIBS) -c -o $(FILE_CM)
 
 clean :
-	rm -f $(FILES)
-	rm -f metatest
-	rm -f *.gcda
-	rm -f *.gcno
-
-metalog :
-	make metatest
-	./metatest
-	gcov -r CourseCalculation.cpp
-	grep -wE "(#####)" CourseCalculation.cpp.gcov > metatestlog.txt
-	rm -f *.gcov
-	make clean
-	sed -i '1s/^/Codelines below not tested by test*.cpp\n/' metatestlog.txt
+	rm -f $(FILE_CC) $(FILE_CM)
