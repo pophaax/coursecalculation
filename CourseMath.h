@@ -5,6 +5,7 @@
 
 class CourseMath {
 public:
+	double limitAngleRange(double angle) const;
 	double degreeToRadian(const double degrees) const;
 	double radianToDegree(const double radians) const;
 	double calculateBTW(const PositionModel boat, const PositionModel waypoint) const;
