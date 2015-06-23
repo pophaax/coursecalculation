@@ -7,9 +7,11 @@ double CourseMath::limitAngleRange(double angle) const
 	double minAngle = 0;
 
 	if (angle < minAngle) {
-		angle += fullRevolution;
+		while (angle < minAngle)
+			angle += fullRevolution;
 	} else if (angle >= minAngle + fullRevolution) {
-		angle -= fullRevolution;
+		while (angle >= minAngle + fullRevolution)
+			angle -= fullRevolution;
 	}
 
 	return angle;
