@@ -60,17 +60,17 @@ void CourseCalculation::calculateDTW(double boatLat, double boatLong, double wpL
 }
 
 int CourseCalculation::determineFirstCTS() {
-
+ 
 	int courseToSteer = 0;
 	int port = countDown();
 	int starboard = countUp();
 		if (port > starboard) {
-			courseToSteer = calculatePortCTS();
-			m_GOING_STARBOARD = false;
-		} 
-		else if (starboard >= port) {
 			courseToSteer = calculateStarboardCTS();
 			m_GOING_STARBOARD = true;
+		} 
+		else if (starboard >= port) {
+			courseToSteer = calculatePortCTS();
+			m_GOING_STARBOARD = false;
 		}
 
 	return courseToSteer;
