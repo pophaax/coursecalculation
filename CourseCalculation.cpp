@@ -1,5 +1,6 @@
-#include "CourseCalculation.h"
 #include <math.h>
+#include "CourseCalculation.h"
+#include "CourseMath.h"
 
 const double PI = 3.1415926;
 const double radiusOfEarth = 6371.0;
@@ -12,52 +13,6 @@ CourseCalculation::CourseCalculation() {
 CourseCalculation::~CourseCalculation() {
 }
 
-void CourseCalculation::decimalToRadian(double boatLat, double boatLong, double wpLat, double wpLong) {
-
-	m_deltaLatitudeRadians 	= (wpLat-boatLat)*PI/radDegree;
-	m_deltaLongitudeRadians = (wpLong-boatLong)*PI/radDegree;
-	m_boatLatitudeInRadian 	= boatLat*PI/radDegree;
-	m_waypointLatitudeInRadian = wpLat*PI/radDegree;
-}
-
-void CourseCalculation::calculateBTW(double boatLat, double boatLong, double wpLat, double wpLong) {
-
-	decimalToRadian(boatLat, boatLong, wpLat, wpLong);
-
-		double y_coordinate = sin(m_deltaLongitudeRadians)
-							* cos(m_waypointLatitudeInRadian);
-
-		double x_coordinate = cos(m_boatLatitudeInRadian)
-							* sin(m_waypointLatitudeInRadian)
-							- sin(m_boatLatitudeInRadian)
-							* cos(m_waypointLatitudeInRadian)
-							* cos(m_deltaLongitudeRadians);
-
-		double bearingToWaypoint = atan2(y_coordinate, x_coordinate) / PI * 180;
-
-		if (bearingToWaypoint < 0) {
-			bearingToWaypoint = 360 + bearingToWaypoint;
-		}
-
-	this->m_bearingToWaypoint = bearingToWaypoint;
-}
-
-void CourseCalculation::calculateDTW(double boatLat, double boatLong, double wpLat, double wpLong) {
-
-	decimalToRadian(boatLat, boatLong, wpLat, wpLong);
-
-		double a = sin(m_deltaLatitudeRadians/2)
-				* sin(m_deltaLatitudeRadians/2)
-				+ cos(m_boatLatitudeInRadian)
-				* cos(m_waypointLatitudeInRadian)
-				* sin(m_deltaLongitudeRadians/2)
-				* sin(m_deltaLongitudeRadians/2); 			
-
-		double b = 2 * atan2(sqrt(a), sqrt(1 - a));
-		double distanceToWaypoint = radiusOfEarth * b * 1000;
-	
-	this->m_distanceToWaypoint = distanceToWaypoint;
-}
 
 int CourseCalculation::determineFirstCTS() {
  
@@ -152,7 +107,11 @@ double CourseCalculation::calculatePortCTS() {
 	return portCTS;
 }
 
-void CourseCalculation::calculateCTS() {
+void CourseCalculation::calculateCTS(PositionModel boat, PositionModel waypoint) {
+
+	CourseMath cm;
+	this->m_distanceToWaypoint = cm.calculateDTW(boat, waypoint);
+	this->m_bearingToWaypoint = cm.calculateBTW(boat, waypoint);
 
 	double cts = 0;
 	calculateTACK();

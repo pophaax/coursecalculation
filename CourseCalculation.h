@@ -1,6 +1,7 @@
 #ifndef __COURSECALCULATION_H__
 #define __COURSECALCULATION_H__
 
+#include "../models/PositionModel.h"
 
 class CourseCalculation {
 
@@ -47,7 +48,7 @@ private:
 	
 
 	/* Converts the longitude/latitude decimal values into radians */
-	void decimalToRadian(double boatLongitude, double boatLatitude, double waypointLongitude, double waypointLatitude);
+//	void decimalToRadian(double boatLongitude, double boatLatitude, double waypointLongitude, double waypointLatitude);
 
 	/* Calculates if the boat has to tack, which it needs if bearing to waypoint is close to true wind direction */
 	bool calculateTACK();
@@ -88,13 +89,13 @@ public:
 	~CourseCalculation();
 
 	/* Calculates the bearing to waypoint angle using the boat's coordinates and the waypoint's coordinates */
-	void calculateBTW(double boatLat, double boatLong, double wpLat, double wpLong);
+//	void calculateBTW(double boatLat, double boatLong, double wpLat, double wpLong);
 
 	/* Calculates the distance in meters to waypoint using the boat's coordinates and the waypoint's coordinates */
-	void calculateDTW(double boatLat, double boatLong, double wpLat, double wpLong);
+//	void calculateDTW(double boatLat, double boatLong, double wpLat, double wpLong);
 
 	/* Calculates course to steer which is the direction the boat is supposed to sail */
-	void calculateCTS();
+	void calculateCTS(PositionModel boat, PositionModel waypoint);
 
 	/* Sets true wind direction */
 	void setTWD(double degrees);
