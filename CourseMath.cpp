@@ -18,6 +18,7 @@ double CourseMath::limitAngleRange(double angle) const
 
 double CourseMath::degreeToRadian(const double degrees) const
 {
+	//const double piRadDegree = 180.0;
 	return degrees * M_PI / 180;
 }
 
@@ -54,5 +55,22 @@ double CourseMath::calculateBTW(const PositionModel boat, const PositionModel wa
 
 double CourseMath::calculateDTW(const PositionModel boat, const PositionModel waypoint) const
 {
-	return 0.0;
+	const double radiusOfEarth = 6371.0;
+
+	double deltaLatitudeRadians = degreeToRadian(waypoint.latitude - boat.latitude);
+	double boatLatitudeInRadian = degreeToRadian(boat.latitude);
+	double waypointLatitudeInRadian = degreeToRadian(waypoint.latitude);
+	double deltaLongitudeRadians = degreeToRadian(waypoint.longitude - boat.longitude);
+
+	double a = sin(deltaLatitudeRadians/2)
+			* sin(deltaLatitudeRadians/2)
+			+ cos(boatLatitudeInRadian)
+			* cos(waypointLatitudeInRadian)
+			* sin(deltaLongitudeRadians/2)
+			* sin(deltaLongitudeRadians/2); 			
+
+	double b = 2 * atan2(sqrt(a), sqrt(1 - a));
+	double distanceToWaypoint = radiusOfEarth * b * 1000;
+	
+	return distanceToWaypoint;
 }
