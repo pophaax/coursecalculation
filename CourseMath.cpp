@@ -1,6 +1,19 @@
 #include "CourseMath.h"
 #include <math.h>
 
+
+double CourseMath::differenceBetweenAngles(double angle1, double angle2) const
+{
+	const double fullRevolution = 360;
+	const double minAngle = 0;
+	
+	double diff = abs(angle1 - angle2);
+	if (diff > fullRevolution/2) diff = fullRevolution - diff;
+
+	return diff;
+}
+
+
 double CourseMath::limitAngleRange(double angle) const
 {
 	const double fullRevolution = 360;
