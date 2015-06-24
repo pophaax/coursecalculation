@@ -1,7 +1,7 @@
 #include "CourseMath.h"
 #include <cmath>
 
-double CourseMath::anglesDifference(const double angle1, const double angle2) const
+double CourseMath::angleDifference(const double angle1, const double angle2) const
 {
 	const double fullRevolution = 360;
 	

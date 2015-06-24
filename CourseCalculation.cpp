@@ -17,8 +17,8 @@ int CourseCalculation::determineFirstCTS()
 	double starboardCTS = calculateStarboardCTS();
 	double portCTS = calculatePortCTS();
 
-	double starboardBTWDiff = m_courseMath.anglesDifference(starboardCTS, m_bearingToWaypoint);
-	double portBTWDiff = m_courseMath.anglesDifference(portCTS, m_bearingToWaypoint);
+	double starboardBTWDiff = m_courseMath.angleDifference(starboardCTS, m_bearingToWaypoint);
+	double portBTWDiff = m_courseMath.angleDifference(portCTS, m_bearingToWaypoint);
 
 	if (portBTWDiff < starboardBTWDiff)
 		courseToSteer = portCTS;
@@ -28,8 +28,8 @@ int CourseCalculation::determineFirstCTS()
 	return courseToSteer;
 }
 
-bool CourseCalculation::continuePort() {
-
+bool CourseCalculation::continuePort()
+{
 	int tmp_BWP = round(m_bearingToWaypoint);
 	int tmp_TWD = m_TWD;
 	int sectorBegin = tmp_TWD - m_TACK_ANGLE;
@@ -54,8 +54,8 @@ bool CourseCalculation::continuePort() {
 	return continueDirection;
 }
 
-bool CourseCalculation::continueStarboard() {
-
+bool CourseCalculation::continueStarboard()
+{
 	int tmp_BWP = round(m_bearingToWaypoint);
 	int tmp_TWD = m_TWD;	
 	int sectorBegin = tmp_TWD + m_TACK_ANGLE;
@@ -80,32 +80,18 @@ bool CourseCalculation::continueStarboard() {
 	return continueDirection;
 }
 
-double CourseCalculation::calculateStarboardCTS() {
-
-	double starboardCTS = 0;
-
-		if (m_TWD + m_TACK_ANGLE > 360) {
-			starboardCTS = m_TWD + m_TACK_ANGLE - 360;
-		} else {
-			starboardCTS = m_TWD + m_TACK_ANGLE;
-		}
-	return starboardCTS;
+double CourseCalculation::calculateStarboardCTS()
+{
+	return m_courseMath.limitAngleRange(m_TWD + m_TACK_ANGLE);
 }
 
-double CourseCalculation::calculatePortCTS() {
-
-	double portCTS = 0;
-
-		if (m_TWD - m_TACK_ANGLE < 0) {
-			portCTS = m_TWD - m_TACK_ANGLE + 360;
-		} else {
-			portCTS = m_TWD - m_TACK_ANGLE;
-		}
-	return portCTS;
+double CourseCalculation::calculatePortCTS()
+{
+	return m_courseMath.limitAngleRange(m_TWD - m_TACK_ANGLE);
 }
 
-void CourseCalculation::calculateCTS(PositionModel boat, PositionModel waypoint) {
-
+void CourseCalculation::calculateCTS(PositionModel boat, PositionModel waypoint)
+{
 	this->m_distanceToWaypoint = m_courseMath.calculateDTW(boat, waypoint);
 	this->m_bearingToWaypoint = m_courseMath.calculateBTW(boat, waypoint);
 
