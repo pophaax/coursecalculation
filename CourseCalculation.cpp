@@ -14,17 +14,16 @@ CourseCalculation::~CourseCalculation() {
 int CourseCalculation::determineFirstCTS()
 {
 	int courseToSteer = 0;
+	double starboardCTS = calculateStarboardCTS();
+	double portCTS = calculatePortCTS();
 
-	double starboardDiff = abs(calculateStarboardCTS() - m_bearingToWaypoint);
-	double portDiff = abs(calculatePortCTS() - m_bearingToWaypoint);
+	double starboardBTWDiff = m_courseMath.anglesDifference(starboardCTS, m_bearingToWaypoint);
+	double portBTWDiff = m_courseMath.anglesDifference(portCTS, m_bearingToWaypoint);
 
-	if (starboardDiff > 180) starboardDiff = 360 - starboardDiff;
-	if (portDiff > 180) portDiff = 360 - portDiff;
-
-	if (portDiff < starboardDiff)
-		courseToSteer = calculatePortCTS();
+	if (portBTWDiff < starboardBTWDiff)
+		courseToSteer = portCTS;
 	else
-		courseToSteer = calculateStarboardCTS();
+		courseToSteer = starboardCTS;
 
 	return courseToSteer;
 }
