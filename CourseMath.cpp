@@ -1,6 +1,21 @@
 #include "CourseMath.h"
 #include <cmath>
 
+
+bool CourseMath::checkIfAngleIsInSector(const double angle, const double sectorAngle1,
+	const double sectorAngle2) const
+{
+	double diff1 = angleDifference(angle, sectorAngle1);
+	double diff2 = angleDifference(angle, sectorAngle2);
+	double sectorDiff = angleDifference(sectorAngle1, sectorAngle2);
+
+	if (diff1 < sectorDiff && diff2 < sectorDiff)
+		return true;
+	else
+		return false;
+}
+
+
 double CourseMath::angleDifference(const double angle1, const double angle2) const
 {
 	const double fullRevolution = 360;
@@ -29,7 +44,6 @@ double CourseMath::limitAngleRange(double angle) const
 
 double CourseMath::degreeToRadian(const double degrees) const
 {
-	//const double piRadDegree = 180.0;
 	return degrees * M_PI / 180;
 }
 
