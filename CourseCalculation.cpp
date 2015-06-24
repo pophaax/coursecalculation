@@ -1,10 +1,8 @@
 #include "CourseCalculation.h"
 #include <math.h>
+#include <iostream>
 #include "CourseMath.h"
 
-const double PI = 3.1415926;
-const double radiusOfEarth = 6371.0;
-const double radDegree = 180.0;
 
 CourseCalculation::CourseCalculation() {
 	m_PREVIOUS_ITERATION_TACK = false;
@@ -13,20 +11,20 @@ CourseCalculation::CourseCalculation() {
 CourseCalculation::~CourseCalculation() {
 }
 
-
-int CourseCalculation::determineFirstCTS() {
- 
+int CourseCalculation::determineFirstCTS()
+{
 	int courseToSteer = 0;
-	int port = countDown();
-	int starboard = countUp();
-		if (port > starboard) {
-			courseToSteer = calculateStarboardCTS();
-			m_GOING_STARBOARD = true;
-		} 
-		else if (starboard >= port) {
-			courseToSteer = calculatePortCTS();
-			m_GOING_STARBOARD = false;
-		}
+
+	double starboardDiff = abs(calculateStarboardCTS() - m_bearingToWaypoint);
+	double portDiff = abs(calculatePortCTS() - m_bearingToWaypoint);
+
+	if (starboardDiff > 180) starboardDiff = 360 - starboardDiff;
+	if (portDiff > 180) portDiff = 360 - portDiff;
+
+	if (portDiff < starboardDiff)
+		courseToSteer = calculatePortCTS();
+	else
+		courseToSteer = calculateStarboardCTS();
 
 	return courseToSteer;
 }
@@ -156,58 +154,6 @@ void CourseCalculation::calculateCTS(PositionModel boat, PositionModel waypoint)
 	m_PREVIOUS_ITERATION_TACK = m_TACK;
 
 }
-
-int CourseCalculation::countUp() {
-
-	int count = 0;
-	int tmp_BWP = round(m_bearingToWaypoint);
-	int tmp_TWD = m_TWD;
-	bool go = true;
-
-
-	for (int i = 0; i < m_TACK_ANGLE && go == true; i++) {
-
-		if (tmp_TWD == tmp_BWP) {
-			go = false;
-		}
-
-		count++;
-		tmp_TWD++;
-
-		if (tmp_TWD == 360) {
-
-			tmp_TWD = 0;
-		}
-	}
-
-	return count;
-}
-
-int CourseCalculation::countDown() {
-
-	int count = 0;
-	int tmp_BWP = round(m_bearingToWaypoint);
-	int tmp_TWD = m_TWD;
-	bool go = true;
-
-	for (int i = 0; i < m_TACK_ANGLE && go == true; i++) {
-
-		if (tmp_TWD == tmp_BWP) {
-			go = false;
-		}
-
-		count++;
-		tmp_TWD--;
-
-		if (tmp_TWD == -1) {
-
-			tmp_TWD = 359;
-		}
-	}
-
-	return count;
-}
-
 
 bool CourseCalculation::calculateTACK()
 {
