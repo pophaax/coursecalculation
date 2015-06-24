@@ -1,13 +1,11 @@
 #include "CourseMath.h"
-#include <math.h>
+#include <cmath>
 
-
-double CourseMath::differenceBetweenAngles(double angle1, double angle2) const
+double CourseMath::anglesDifference(const double angle1, const double angle2) const
 {
 	const double fullRevolution = 360;
-	const double minAngle = 0;
 	
-	double diff = abs(angle1 - angle2);
+	double diff = std::abs(limitAngleRange(angle1) - limitAngleRange(angle2));
 	if (diff > fullRevolution/2) diff = fullRevolution - diff;
 
 	return diff;
