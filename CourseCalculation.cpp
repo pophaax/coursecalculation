@@ -21,9 +21,15 @@ int CourseCalculation::determineFirstCTS()
 	double portBTWDiff = m_courseMath.angleDifference(portCTS, m_bearingToWaypoint);
 
 	if (portBTWDiff < starboardBTWDiff)
+	{
 		courseToSteer = portCTS;
+		m_GOING_STARBOARD = false;
+	}
 	else
+	{
 		courseToSteer = starboardCTS;
+		m_GOING_STARBOARD = true;
+	}
 
 	return courseToSteer;
 }
@@ -92,8 +98,8 @@ double CourseCalculation::calculatePortCTS()
 
 void CourseCalculation::calculateCTS(PositionModel boat, PositionModel waypoint)
 {
-	this->m_distanceToWaypoint = m_courseMath.calculateDTW(boat, waypoint);
-	this->m_bearingToWaypoint = m_courseMath.calculateBTW(boat, waypoint);
+	m_distanceToWaypoint = m_courseMath.calculateDTW(boat, waypoint);
+	m_bearingToWaypoint = m_courseMath.calculateBTW(boat, waypoint);
 
 	double cts = 0;
 	calculateTACK();
@@ -160,19 +166,19 @@ bool CourseCalculation::calculateTACK()
 }
 
 void CourseCalculation::setTWD(double degrees) {
-	this->m_TWD = degrees;
+	m_TWD = degrees;
 }
 
 void CourseCalculation::setBTW(double degrees) {
-	this->m_bearingToWaypoint = degrees;
+	m_bearingToWaypoint = degrees;
 }
 
 void CourseCalculation::setTACK_ANGLE(double degrees) {
-	this->m_TACK_ANGLE = degrees;
+	m_TACK_ANGLE = degrees;
 }
 
 void CourseCalculation::setSECTOR_ANGLE(double degrees) {
-	this->m_SECTOR_ANGLE = degrees;
+	m_SECTOR_ANGLE = degrees;
 }
 
 double CourseCalculation::getCTS() {
