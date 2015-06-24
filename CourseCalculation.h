@@ -2,6 +2,7 @@
 #define __COURSECALCULATION_H__
 
 #include "../models/PositionModel.h"
+#include "CourseMath.h"
 
 class CourseCalculation {
 
@@ -46,6 +47,7 @@ private:
 	/* The waypoint's latitude value in radian */
 	double m_waypointLatitudeInRadian;
 	
+	CourseMath m_courseMath;
 
 	/* Converts the longitude/latitude decimal values into radians */
 //	void decimalToRadian(double boatLongitude, double boatLatitude, double waypointLongitude, double waypointLatitude);

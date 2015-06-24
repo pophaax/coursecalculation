@@ -1,5 +1,5 @@
-#include <math.h>
 #include "CourseMath.h"
+#include <math.h>
 
 double CourseMath::limitAngleRange(double angle) const
 {

@@ -1,5 +1,5 @@
-#include <math.h>
 #include "CourseCalculation.h"
+#include <math.h>
 #include "CourseMath.h"
 
 const double PI = 3.1415926;
@@ -109,9 +109,8 @@ double CourseCalculation::calculatePortCTS() {
 
 void CourseCalculation::calculateCTS(PositionModel boat, PositionModel waypoint) {
 
-	CourseMath cm;
-	this->m_distanceToWaypoint = cm.calculateDTW(boat, waypoint);
-	this->m_bearingToWaypoint = cm.calculateBTW(boat, waypoint);
+	this->m_distanceToWaypoint = m_courseMath.calculateDTW(boat, waypoint);
+	this->m_bearingToWaypoint = m_courseMath.calculateBTW(boat, waypoint);
 
 	double cts = 0;
 	calculateTACK();
@@ -209,60 +208,21 @@ int CourseCalculation::countDown() {
 	return count;
 }
 
-bool CourseCalculation::calcUp() {
 
-	int tmp_TWD = m_TWD;
-	int tmp_BWP = round(m_bearingToWaypoint);
-	bool tack = false;
+bool CourseCalculation::calculateTACK()
+{
+	m_TACK = false;
+	double minWindAngle = m_courseMath.limitAngleRange(m_bearingToWaypoint - m_TACK_ANGLE);
+	double maxWindAngle = m_courseMath.limitAngleRange(m_bearingToWaypoint + m_TACK_ANGLE);
 
-	for (int i = 0; i < m_TACK_ANGLE; i++) {
-
-		if (tmp_TWD == tmp_BWP) {
-			tack = true;
-		}
-
-		tmp_TWD++;
-
-		if (tmp_TWD == 360) {
-			tmp_TWD = 0;
-		}
-
+	if (minWindAngle > maxWindAngle)
+	{
+		if (m_TWD > minWindAngle || m_TWD < maxWindAngle)
+			m_TACK = true;
 	}
-
-	return tack;
-}
-
-bool CourseCalculation::calcDown() {
-
-	int tmp_TWD = m_TWD;
-	int tmp_BWP = round(m_bearingToWaypoint);
-	bool tack = false;
-
-	for (int i = 0; i < m_TACK_ANGLE; i++) {
-
-		if (tmp_TWD == tmp_BWP) {
-			tack = true;
-		}
-
-		tmp_TWD--;
-
-		if (tmp_TWD == -1) {
-			tmp_TWD = 359;
-		}
-
-	}
-
-	return tack;
-}
-
-bool CourseCalculation::calculateTACK() {
-
-	if (calcUp() || calcDown()) {
-		m_TACK = true;
-	}
-
-	else {
-		m_TACK = false;
+	else if (m_TWD > minWindAngle && m_TWD < maxWindAngle)
+	{
+			m_TACK = true;
 	}
 
 	return m_TACK;
