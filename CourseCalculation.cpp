@@ -149,16 +149,8 @@ void CourseCalculation::calculateCTS(PositionModel boat, PositionModel waypoint)
 bool CourseCalculation::calculateTACK()
 {
 	double minTackAngle = m_TWD - m_TACK_ANGLE;
-	double minTackBTWDiff = m_courseMath.angleDifference(minTackAngle, m_bearingToWaypoint);
-
 	double maxTackAngle = m_TWD + m_TACK_ANGLE;
-	double maxTackBTWDiff = m_courseMath.angleDifference(maxTackAngle, m_bearingToWaypoint);
-
-	if (minTackBTWDiff < m_TACK_ANGLE*2 && maxTackBTWDiff < m_TACK_ANGLE*2)
-		m_TACK = true;
-	else
-		m_TACK = false;
-
+	m_TACK = m_courseMath.isAngleInSector(m_bearingToWaypoint, minTackAngle, maxTackAngle);
 	return m_TACK;
 }
 

@@ -2,7 +2,7 @@
 #include <cmath>
 
 
-bool CourseMath::checkIfAngleIsInSector(const double angle, const double sectorAngle1,
+bool CourseMath::isAngleInSector(const double angle, const double sectorAngle1,
 	const double sectorAngle2) const
 {
 	double diff1 = angleDifference(angle, sectorAngle1);
