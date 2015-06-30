@@ -9,16 +9,16 @@ class CourseCalculation {
 private:
 
 	/* Has to tack */
-	bool m_TACK;
+	bool m_tack;
 
 	/* Did we tack last iteration? */
-	bool m_PREVIOUS_ITERATION_TACK;
+	bool m_previousIterationTack;
 
 	/* Check for the boat's direction*/
-	bool m_GOING_STARBOARD;
+	bool m_goingStarboard;
 
 	/* Course to steer */
-	double m_CTS;
+	double m_courseToSteer;
 
 	/* Bearing to waypoint */
 	double m_bearingToWaypoint;
@@ -27,13 +27,13 @@ private:
 	double m_distanceToWaypoint;
 
 	/* True wind direction */
-	double m_TWD;
+	double m_trueWindDirection;
 
 	/* Angle around true wind direction in which the boat has to tack */
-	double m_TACK_ANGLE;
+	double m_tackAngle;
 
 	/* Angle around true wind direction in which the boat will be turning side when tacking */
-	double m_SECTOR_ANGLE;
+	double m_sectorAngle;
 		
 	/* Difference between waypoint latitude and boat latitude turned into radians */
 	double m_deltaLatitudeRadians;
