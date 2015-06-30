@@ -1,11 +1,11 @@
 #include "CourseCalculation.h"
 #include <math.h>
-#include <iostream>
 #include "CourseMath.h"
 
 
 CourseCalculation::CourseCalculation() {
 	m_PREVIOUS_ITERATION_TACK = false;
+	m_distanceToWaypoint = 100000.0;
 }
 
 CourseCalculation::~CourseCalculation() {
@@ -36,53 +36,25 @@ int CourseCalculation::determineFirstCTS()
 
 bool CourseCalculation::continuePort()
 {
-	int tmp_BWP = round(m_bearingToWaypoint);
-	int tmp_TWD = m_TWD;
-	int sectorBegin = tmp_TWD - m_TACK_ANGLE;
 	bool continueDirection = false;
+	double sectorBegin = m_TWD - m_TACK_ANGLE;
+	double sectorEnd = m_TWD + m_SECTOR_ANGLE;
 
-	if (sectorBegin < 0) {
-		sectorBegin += 360;
-	}
+	if (m_courseMath.isAngleInSector(m_bearingToWaypoint, sectorBegin, sectorEnd))
+		continueDirection = true;
 
-		for (int i = 0; i < (m_TACK_ANGLE + m_SECTOR_ANGLE); i++) {
-
-			if (tmp_BWP == sectorBegin) {
-				continueDirection = true;
-				break;
-			}
-
-			sectorBegin++;
-				if (sectorBegin == 360) {
-					sectorBegin = 0;
-				}
-		}
 	return continueDirection;
 }
 
 bool CourseCalculation::continueStarboard()
 {
-	int tmp_BWP = round(m_bearingToWaypoint);
-	int tmp_TWD = m_TWD;	
-	int sectorBegin = tmp_TWD + m_TACK_ANGLE;
 	bool continueDirection = false;
+	double sectorBegin = m_TWD + m_TACK_ANGLE;
+	double sectorEnd = m_TWD - m_SECTOR_ANGLE;
 
-	if (sectorBegin >= 360) {
-		sectorBegin -= 360;
-	}
+	if (m_courseMath.isAngleInSector(m_bearingToWaypoint, sectorBegin, sectorEnd))
+		continueDirection = true;
 
-		for (int i = 0; i < (m_TACK_ANGLE + m_SECTOR_ANGLE); i++) {
-
-			if (tmp_BWP == sectorBegin) {
-				continueDirection = true;
-				break;
-			}
-
-			sectorBegin--;
-				if (sectorBegin == -1) {
-					sectorBegin = 359;
-				}
-		}
 	return continueDirection;
 }
 
@@ -102,51 +74,51 @@ void CourseCalculation::calculateCTS(PositionModel boat, PositionModel waypoint)
 	m_bearingToWaypoint = m_courseMath.calculateBTW(boat, waypoint);
 
 	double cts = 0;
-	calculateTACK();
+	calculateTack();
 
-		if (m_TACK == true) {
-			// We are going against the wind direction
-			if (m_PREVIOUS_ITERATION_TACK == false) {
-				// We just ended up in tack position
-				cts = determineFirstCTS();
-			} 
-			else {
-				// We are still in tack position
-				if (m_GOING_STARBOARD) {
-					// Wind is coming from port but we are going in starboard direction relative to the wind
-					if (!continueStarboard()) {
-						// CTS should switch to port side
-						m_GOING_STARBOARD = false;
-						cts = calculatePortCTS();
-					} else {
-						// CTS should remain about the same
-						cts = calculateStarboardCTS();
-					}
+	if (m_TACK == true) {
+		// We are going against the wind direction
+		if (m_PREVIOUS_ITERATION_TACK == false) {
+			// We just ended up in tack position
+			cts = determineFirstCTS();
+		} 
+		else {
+			// We are still in tack position
+			if (m_GOING_STARBOARD) {
+				// Wind is coming from port but we are going in starboard direction relative to the wind
+				if (!continueStarboard()) {
+					// CTS should switch to port side
+					m_GOING_STARBOARD = false;
+					cts = calculatePortCTS();
+				} else {
+					// CTS should remain about the same
+					cts = calculateStarboardCTS();
 				}
-				else if (!m_GOING_STARBOARD) {
-					// Wind is coming from starboard but we are going in port direction relative to the wind
-					if (!continuePort()) {
-						// CTS should switch to starboard side
-						m_GOING_STARBOARD = true;
-						cts = calculateStarboardCTS();
-					} else {
-						// CTS should remain about the same
-						cts = calculatePortCTS();
-					}
+			}
+			else if (!m_GOING_STARBOARD) {
+				// Wind is coming from starboard but we are going in port direction relative to the wind
+				if (!continuePort()) {
+					// CTS should switch to starboard side
+					m_GOING_STARBOARD = true;
+					cts = calculateStarboardCTS();
+				} else {
+					// CTS should remain about the same
+					cts = calculatePortCTS();
 				}
 			}
 		}
-		else {
-			// We are not going against the wind direction
-			cts = m_bearingToWaypoint;
-		}
+	}
+	else {
+		// We are not going against the wind direction
+		cts = m_bearingToWaypoint;
+	}
 
 	m_CTS = cts;
 	m_PREVIOUS_ITERATION_TACK = m_TACK;
 
 }
 
-bool CourseCalculation::calculateTACK()
+bool CourseCalculation::calculateTack()
 {
 	double minTackAngle = m_TWD - m_TACK_ANGLE;
 	double maxTackAngle = m_TWD + m_TACK_ANGLE;

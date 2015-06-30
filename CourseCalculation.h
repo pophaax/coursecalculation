@@ -53,7 +53,7 @@ private:
 //	void decimalToRadian(double boatLongitude, double boatLatitude, double waypointLongitude, double waypointLatitude);
 
 	/* Calculates if the boat has to tack, which it needs if bearing to waypoint is close to true wind direction */
-	bool calculateTACK();
+	bool calculateTack();
 	
 	/* */
 	bool calcUp();
