@@ -49,8 +49,6 @@ private:
 	
 	CourseMath m_courseMath;
 
-	/* Converts the longitude/latitude decimal values into radians */
-//	void decimalToRadian(double boatLongitude, double boatLatitude, double waypointLongitude, double waypointLatitude);
 
 	/* Calculates if the boat has to tack, which it needs if bearing to waypoint is close to true wind direction */
 	bool calculateTack();
@@ -90,26 +88,20 @@ public:
 	/* Destructor */
 	~CourseCalculation();
 
-	/* Calculates the bearing to waypoint angle using the boat's coordinates and the waypoint's coordinates */
-//	void calculateBTW(double boatLat, double boatLong, double wpLat, double wpLong);
-
-	/* Calculates the distance in meters to waypoint using the boat's coordinates and the waypoint's coordinates */
-//	void calculateDTW(double boatLat, double boatLong, double wpLat, double wpLong);
-
 	/* Calculates course to steer which is the direction the boat is supposed to sail */
-	void calculateCTS(PositionModel boat, PositionModel waypoint);
+	void calculateCourseToSteer(PositionModel boat, PositionModel waypoint);
 
 	/* Sets true wind direction */
-	void setTWD(double degrees);
+	void setTrueWindDirection(double degrees);
 
 	/* Sets bearing to waypoint */
-	void setBTW(double degrees);
+	void setBearingToWaypoint(double degrees);
 
 	/* Sets TACK_ANGLE */
-	void setTACK_ANGLE(double degrees);
+	void setTackAngle(double degrees);
 
 	/* Sets SECTOR_ANGLE */
-	void setSECTOR_ANGLE(double degrees);
+	void setSectorAngle(double degrees);
 
 	/* Gets the distance to waypoint */
 	double getDTW();
@@ -124,9 +116,9 @@ public:
 	double getTWD();
 
 	/* Gets wheter the boat has to tack */
-	bool getTACK();
+	bool getTack();
 
-	bool getGOING_STARBOARD();
+	bool getGoingStarboard();
 };
 
 #endif
