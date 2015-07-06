@@ -39,24 +39,15 @@ private:
 	CourseMath m_courseMath;
 
 	/* Calculates if the boat has to tack, which it needs if bearing to waypoint is close to true wind direction */
-	bool calculateTack();
+	void calculateTack();
 
 	double distanceFromWaypointToSector(const double waypointRadius) const;
 	
-	/* */
-	bool continueStarboard(const double waypointRadius) const;
+	bool continueDirection(const double waypointRadius) const;
 
-	/* */
-	bool continuePort(const double waypointRadius) const;
-
-	/* */
-	int determineFirstCTS();
+	void determineTackDirection();
 	
-	/* */
-	double calculateStarboardCTS();
-
-	/* */
-	double calculatePortCTS();
+	double calculateTackCTS() const;
 
 public:
 
