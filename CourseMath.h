@@ -13,6 +13,8 @@ public:
 	double radianToDegree(const double radians) const;
 	double calculateBTW(const PositionModel boat, const PositionModel waypoint) const;
 	double calculateDTW(const PositionModel boat, const PositionModel waypoint) const;
+	double lengthOfTriangleSide(const double angleOppositeToSide,
+		const double lengthA, const double angleOppositeToA) const;
 };
 
 #endif

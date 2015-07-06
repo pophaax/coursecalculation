@@ -2,6 +2,7 @@
 #define __COURSECALCULATION_H__
 
 #include "../models/PositionModel.h"
+#include "../models/WaypointModel.h"
 #include "CourseMath.h"
 
 class CourseCalculation {
@@ -34,42 +35,19 @@ private:
 
 	/* Angle around true wind direction in which the boat will be turning side when tacking */
 	double m_sectorAngle;
-		
-	/* Difference between waypoint latitude and boat latitude turned into radians */
-	double m_deltaLatitudeRadians;
-
-	/* Difference between waypoint longitude and boat longitude turned into radians */
-	double m_deltaLongitudeRadians;
-
-	/* The boat's latitude value in radian */
-	double m_boatLatitudeInRadian;
-
-	/* The waypoint's latitude value in radian */
-	double m_waypointLatitudeInRadian;
 	
 	CourseMath m_courseMath;
 
-
 	/* Calculates if the boat has to tack, which it needs if bearing to waypoint is close to true wind direction */
 	bool calculateTack();
+
+	double distanceFromWaypointToSector(const double waypointRadius) const;
 	
 	/* */
-	bool calcUp();
+	bool continueStarboard(const double waypointRadius) const;
 
 	/* */
-	bool calcDown();
-
-	/* */
-	bool continueStarboard();
-
-	/* */
-	bool continuePort();
-
-	/* */
-	int countUp();
-
-	/* */
-	int countDown();
+	bool continuePort(const double waypointRadius) const;
 
 	/* */
 	int determineFirstCTS();
@@ -89,7 +67,7 @@ public:
 	~CourseCalculation();
 
 	/* Calculates course to steer which is the direction the boat is supposed to sail */
-	void calculateCourseToSteer(PositionModel boat, PositionModel waypoint);
+	void calculateCourseToSteer(PositionModel boat, WaypointModel waypoint);
 
 	/* Sets true wind direction */
 	void setTrueWindDirection(double degrees);

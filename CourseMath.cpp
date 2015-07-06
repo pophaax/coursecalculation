@@ -99,3 +99,11 @@ double CourseMath::calculateDTW(const PositionModel boat, const PositionModel wa
 	
 	return distanceToWaypoint;
 }
+
+
+double CourseMath::lengthOfTriangleSide(const double angleOppositeToSide,
+	const double lengthA, const double angleOppositeToA) const
+{
+	return lengthA * sin(degreeToRadian(angleOppositeToSide)) /
+		sin(degreeToRadian(angleOppositeToA));
+}
