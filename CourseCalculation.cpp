@@ -3,7 +3,10 @@
 #include "CourseMath.h"
 
 
-CourseCalculation::CourseCalculation() {
+CourseCalculation::CourseCalculation() :
+	m_tack(false),
+	m_goingStarboard(false)
+{
 	m_previousIterationTack = false;
 	m_distanceToWaypoint = 100000.0;
 }
