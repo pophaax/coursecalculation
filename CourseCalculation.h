@@ -41,7 +41,7 @@ private:
 	/* Calculates if the boat has to tack, which it needs if bearing to waypoint is close to true wind direction */
 	void calculateTack();
 
-	double distanceFromWaypointToSector(const double waypointRadius) const;
+	double distanceFromWaypointToTackSector(const double waypointRadius) const;
 	
 	bool continueDirection(const double waypointRadius) const;
 

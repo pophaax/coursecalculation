@@ -40,7 +40,7 @@ bool CourseCalculation::continueDirection(const double waypointRadius) const
 	sectorEnd = m_trueWindDirection + (directionMult * m_tackAngle);
 	if (m_courseMath.isAngleInSector(m_bearingToWaypoint, sectorBegin, sectorEnd))
 	{
-		double distance = distanceFromWaypointToSector(waypointRadius);
+		double distance = distanceFromWaypointToTackSector(waypointRadius);
 		if (m_distanceToWaypoint < distance)
 			continueDirection = true;
 	}
@@ -48,17 +48,12 @@ bool CourseCalculation::continueDirection(const double waypointRadius) const
 	return continueDirection;
 }
 
-double CourseCalculation::distanceFromWaypointToSector(const double waypointRadius) const
+double CourseCalculation::distanceFromWaypointToTackSector(const double waypointRadius) const
 {
-	double sectorOrigionToWaypoint = m_courseMath.lengthOfTriangleSide(
-		90, waypointRadius, m_sectorAngle);
+	double angleBetweenBTWAndTS =
+		m_courseMath.angleDifference(m_trueWindDirection, m_bearingToWaypoint) - m_sectorAngle;
 
-	double a = m_sectorAngle;
-	double b = 180 - m_courseMath.angleDifference(m_bearingToWaypoint, m_trueWindDirection);
-	double c = 180 - a - b;
-	double intersectionToWP = m_courseMath.lengthOfTriangleSide(a, sectorOrigionToWaypoint, c);
-
-	return intersectionToWP;
+	return waypointRadius / sin(m_courseMath.degreeToRadian(angleBetweenBTWAndTS));
 }
 
 double CourseCalculation::calculateTackCTS() const
@@ -77,9 +72,8 @@ void CourseCalculation::calculateCourseToSteer(PositionModel boat, WaypointModel
 
 	calculateTack();
 
-	if (m_tack && !m_previousIterationTack) {
+	if (m_tack && !m_previousIterationTack)
 		determineTackDirection();
-	}
 
 	if(m_tack)
 	{
@@ -88,7 +82,8 @@ void CourseCalculation::calculateCourseToSteer(PositionModel boat, WaypointModel
 
 		m_courseToSteer = calculateTackCTS();
 	}
-	else {
+	else
+	{
 		m_courseToSteer = m_bearingToWaypoint;
 	}
 
