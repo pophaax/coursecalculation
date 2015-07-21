@@ -1,65 +1,14 @@
 #include "CourseMath.h"
 #include <cmath>
 #include "models/PositionModel.h"
+#include "utility/Utility.h"
 
 
-bool CourseMath::isAngleInSector(const double angle, const double sectorAngle1,
-	const double sectorAngle2) const
+double CourseMath::calculateBTW(PositionModel boat, PositionModel waypoint) const
 {
-	double diff1 = angleDifference(angle, sectorAngle1);
-	double diff2 = angleDifference(angle, sectorAngle2);
-	double sectorDiff = angleDifference(sectorAngle1, sectorAngle2);
-
-	if (diff1 < sectorDiff && diff2 < sectorDiff)
-		return true;
-	else
-		return false;
-}
-
-
-double CourseMath::angleDifference(const double angle1, const double angle2) const
-{
-	const double fullRevolution = 360;
-	
-	double diff = std::abs(limitAngleRange(angle1) - limitAngleRange(angle2));
-	if (diff > fullRevolution/2) diff = fullRevolution - diff;
-
-	return diff;
-}
-
-
-double CourseMath::limitAngleRange(double angle) const
-{
-	const double fullRevolution = 360;
-	const double minAngle = 0;
-
-	while (angle < minAngle)
-		angle += fullRevolution;
-
-	while (angle >= minAngle + fullRevolution)
-		angle -= fullRevolution;
-
-	return angle;
-}
-
-
-double CourseMath::degreeToRadian(const double degrees) const
-{
-	return degrees * M_PI / 180;
-}
-
-
-double CourseMath::radianToDegree(const double radians) const
-{
-	return radians / M_PI * 180;
-}
-
-
-double CourseMath::calculateBTW(const PositionModel boat, const PositionModel waypoint) const
-{
-	double boatLatitudeInRadian = degreeToRadian(boat.latitude);
-	double waypointLatitudeInRadian = degreeToRadian(waypoint.latitude);
-	double deltaLongitudeRadian = degreeToRadian(waypoint.longitude - boat.longitude);
+	double boatLatitudeInRadian = Utility::degreeToRadian(boat.latitude);
+	double waypointLatitudeInRadian = Utility::degreeToRadian(waypoint.latitude);
+	double deltaLongitudeRadian = Utility::degreeToRadian(waypoint.longitude - boat.longitude);
 
 	double y_coordinate = sin(deltaLongitudeRadian)
 						* cos(waypointLatitudeInRadian);
@@ -71,22 +20,22 @@ double CourseMath::calculateBTW(const PositionModel boat, const PositionModel wa
 						* cos(deltaLongitudeRadian);
 
 	double bearingToWaypointInRadian = atan2(y_coordinate, x_coordinate);
-	double bearingToWaypoint = radianToDegree(bearingToWaypointInRadian);
+	double bearingToWaypoint = Utility::radianToDegree(bearingToWaypointInRadian);
 
-	bearingToWaypoint = limitAngleRange(bearingToWaypoint);
+	bearingToWaypoint = Utility::limitAngleRange(bearingToWaypoint);
 
 	return bearingToWaypoint;
 }
 
 
-double CourseMath::calculateDTW(const PositionModel boat, const PositionModel waypoint) const
+double CourseMath::calculateDTW(PositionModel boat, PositionModel waypoint) const
 {
 	const double radiusOfEarth = 6371.0;
 
-	double deltaLatitudeRadians = degreeToRadian(waypoint.latitude - boat.latitude);
-	double boatLatitudeInRadian = degreeToRadian(boat.latitude);
-	double waypointLatitudeInRadian = degreeToRadian(waypoint.latitude);
-	double deltaLongitudeRadians = degreeToRadian(waypoint.longitude - boat.longitude);
+	double deltaLatitudeRadians = Utility::degreeToRadian(waypoint.latitude - boat.latitude);
+	double boatLatitudeInRadian = Utility::degreeToRadian(boat.latitude);
+	double waypointLatitudeInRadian = Utility::degreeToRadian(waypoint.latitude);
+	double deltaLongitudeRadians = Utility::degreeToRadian(waypoint.longitude - boat.longitude);
 
 	double a = sin(deltaLatitudeRadians/2)
 			* sin(deltaLatitudeRadians/2)
