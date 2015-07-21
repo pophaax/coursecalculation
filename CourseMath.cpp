@@ -1,5 +1,6 @@
 #include "CourseMath.h"
 #include <cmath>
+#include "models/PositionModel.h"
 
 
 bool CourseMath::isAngleInSector(const double angle, const double sectorAngle1,

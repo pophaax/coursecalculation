@@ -9,7 +9,7 @@
 
 CC = g++
 FLAGS = -Wall -pedantic -Werror -std=c++14
-LIBS =
+LIBS = -I $(SAILINGROBOTS_HOME)
 
 SOURCES_CC = CourseCalculation.cpp
 HEADERS_CC = CourseCalculation.h

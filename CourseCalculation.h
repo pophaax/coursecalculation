@@ -1,9 +1,10 @@
 #ifndef __COURSECALCULATION_H__
 #define __COURSECALCULATION_H__
 
-#include "../models/PositionModel.h"
-#include "../models/WaypointModel.h"
 #include "CourseMath.h"
+
+class PositionModel;
+class WaypointModel;
 
 class CourseCalculation {
 

@@ -1,7 +1,7 @@
 #ifndef __COURSEMATH_H__
 #define __COURSEMATH_H__
 
-#include "../models/PositionModel.h"
+class PositionModel;
 
 class CourseMath {
 public:

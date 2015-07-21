@@ -1,6 +1,7 @@
 #include "CourseCalculation.h"
 #include <math.h>
-#include "CourseMath.h"
+#include "models/PositionModel.h"
+#include "models/WaypointModel.h"
 
 
 CourseCalculation::CourseCalculation() :
