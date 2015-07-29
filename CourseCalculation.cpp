@@ -105,14 +105,14 @@ void CourseCalculation::calculateTack()
 	m_tack = Utility::isAngleInSector(m_bearingToWaypoint, minTackAngle, maxTackAngle);
 }
 
-/*
+
 void CourseCalculation::setTrueWindDirection(double degrees) {
 	m_trueWindDirection = degrees;
 }
 
 void CourseCalculation::setBearingToWaypoint(double degrees) {
 	m_bearingToWaypoint = degrees;
-}*/
+}
 
 void CourseCalculation::setTackAngle(double degrees) {
 	m_tackAngle = degrees;

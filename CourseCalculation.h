@@ -62,10 +62,10 @@ public:
 	double calculateCourseToSteer(PositionModel boat, WaypointModel waypoint, double trueWindDirection);
 
 	/* Sets true wind direction */
-//	void setTrueWindDirection(double degrees);
+	void setTrueWindDirection(double degrees);
 
 	/* Sets bearing to waypoint */
-//	void setBearingToWaypoint(double degrees);
+	void setBearingToWaypoint(double degrees);
 
 	/* Sets TACK_ANGLE */
 	void setTackAngle(double degrees);
