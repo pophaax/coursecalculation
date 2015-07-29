@@ -70,8 +70,10 @@ double CourseCalculation::calculateTackCTS() const
 	return Utility::limitAngleRange(m_trueWindDirection - (directionMult * m_tackAngle));
 }
 
-void CourseCalculation::calculateCourseToSteer(PositionModel boat, WaypointModel waypoint)
+double CourseCalculation::calculateCourseToSteer(PositionModel boat, WaypointModel waypoint,
+	double trueWindDirection)
 {
+	m_trueWindDirection = trueWindDirection;
 	m_distanceToWaypoint = m_courseMath.calculateDTW(boat, waypoint.positionModel);
 	m_bearingToWaypoint = m_courseMath.calculateBTW(boat, waypoint.positionModel);
 
@@ -93,6 +95,7 @@ void CourseCalculation::calculateCourseToSteer(PositionModel boat, WaypointModel
 	}
 
 	m_previousIterationTack = m_tack;
+	return m_courseToSteer;
 }
 
 void CourseCalculation::calculateTack()
@@ -102,14 +105,14 @@ void CourseCalculation::calculateTack()
 	m_tack = Utility::isAngleInSector(m_bearingToWaypoint, minTackAngle, maxTackAngle);
 }
 
-
+/*
 void CourseCalculation::setTrueWindDirection(double degrees) {
 	m_trueWindDirection = degrees;
 }
 
 void CourseCalculation::setBearingToWaypoint(double degrees) {
 	m_bearingToWaypoint = degrees;
-}
+}*/
 
 void CourseCalculation::setTackAngle(double degrees) {
 	m_tackAngle = degrees;
