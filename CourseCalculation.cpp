@@ -16,76 +16,6 @@ CourseCalculation::CourseCalculation() :
 CourseCalculation::~CourseCalculation() {
 }
 
-void CourseCalculation::determineTackDirection()
-{
-	double sectorBegin = m_trueWindDirection - m_tackAngle;
-	double sectorEnd = m_trueWindDirection;
-	if (Utility::isAngleInSector(m_bearingToWaypoint, sectorBegin, sectorEnd))
-		m_goingStarboard = false;
-
-	sectorBegin = m_trueWindDirection;
-	sectorEnd = m_trueWindDirection + m_tackAngle;
-	if (Utility::isAngleInSector(m_bearingToWaypoint, sectorBegin, sectorEnd))
-		m_goingStarboard = true;
-}
-
-bool CourseCalculation::continueDirection(double waypointRadius) const
-{
-	bool continueDirection = false;
-
-	if (m_goingStarboard)
-	{
-		double sectorBegin = m_trueWindDirection - m_sectorAngle;
-		double sectorEnd = m_trueWindDirection + m_tackAngle;
-		if (Utility::isAngleInSector(m_bearingToWaypoint, sectorBegin, sectorEnd))
-			continueDirection = true;
-
-		sectorBegin = m_trueWindDirection - m_tackAngle;
-		sectorEnd = m_trueWindDirection - m_sectorAngle;
-		if (Utility::isAngleInSector(m_bearingToWaypoint, sectorBegin, sectorEnd))
-		{
-			double distance = distanceFromWaypointToTackSector(waypointRadius);
-			if (m_distanceToWaypoint < distance)
-				continueDirection = true;
-		}
-	}
-	else
-	{
-		double sectorBegin = m_trueWindDirection - m_tackAngle;
-		double sectorEnd = m_trueWindDirection + m_sectorAngle;
-		if (Utility::isAngleInSector(m_bearingToWaypoint, sectorBegin, sectorEnd))
-			continueDirection = true;
-
-		sectorBegin = m_trueWindDirection + m_sectorAngle;
-		sectorEnd = m_trueWindDirection + m_tackAngle;
-		if (Utility::isAngleInSector(m_bearingToWaypoint, sectorBegin, sectorEnd))
-		{
-			double distance = distanceFromWaypointToTackSector(waypointRadius);
-			if (m_distanceToWaypoint < distance)
-				continueDirection = true;
-		}
-	}
-
-	return continueDirection;
-}
-
-double CourseCalculation::distanceFromWaypointToTackSector(double waypointRadius) const
-{
-	double angleBetweenBTWAndTS =
-		Utility::angleDifference(m_trueWindDirection, m_bearingToWaypoint) - m_sectorAngle;
-
-	return waypointRadius / sin(Utility::degreeToRadian(angleBetweenBTWAndTS));
-}
-
-double CourseCalculation::calculateTackCTS() const
-{
-	int directionMult = 1;
-	if (m_goingStarboard)
-		directionMult = -1;
-
-	return Utility::limitAngleRange(m_trueWindDirection - (directionMult * m_tackAngle));
-}
-
 double CourseCalculation::calculateCourseToSteer(PositionModel boat, WaypointModel waypoint,
 	double trueWindDirection)
 {
@@ -112,6 +42,72 @@ double CourseCalculation::calculateCourseToSteer(PositionModel boat, WaypointMod
 
 	m_previousIterationTack = m_tack;
 	return m_courseToSteer;
+}
+
+void CourseCalculation::determineTackDirection()
+{
+	double sectorBegin = m_trueWindDirection - m_tackAngle;
+	double sectorEnd = m_trueWindDirection;
+	if (Utility::isAngleInSector(m_bearingToWaypoint, sectorBegin, sectorEnd))
+		m_goingStarboard = false;
+
+	sectorBegin = m_trueWindDirection;
+	sectorEnd = m_trueWindDirection + m_tackAngle;
+	if (Utility::isAngleInSector(m_bearingToWaypoint, sectorBegin, sectorEnd))
+		m_goingStarboard = true;
+}
+
+bool CourseCalculation::continueDirection(double waypointRadius) const
+{
+	bool continueDirection = false;
+	double sectorBegin = 0;
+	double sectorEnd = 0;
+	double extendedSectorBegin = 0;
+	double extendedSectorEnd = 0;
+
+	if (m_goingStarboard)
+	{
+		sectorBegin = m_trueWindDirection - m_sectorAngle;
+		sectorEnd = m_trueWindDirection + m_tackAngle;
+		extendedSectorBegin = m_trueWindDirection - m_tackAngle;
+		extendedSectorEnd = m_trueWindDirection - m_sectorAngle;
+	}
+	else
+	{
+		sectorBegin = m_trueWindDirection - m_tackAngle;
+		sectorEnd = m_trueWindDirection + m_sectorAngle;
+		extendedSectorBegin = m_trueWindDirection + m_sectorAngle;
+		extendedSectorEnd = m_trueWindDirection + m_tackAngle;
+	}
+
+ 	if (Utility::isAngleInSector(m_bearingToWaypoint, sectorBegin, sectorEnd))
+		continueDirection = true;
+
+	if (Utility::isAngleInSector(m_bearingToWaypoint, extendedSectorBegin, extendedSectorEnd))
+	{
+		double distance = distanceFromWaypointToTackSector(waypointRadius);
+		if (m_distanceToWaypoint < distance)
+			continueDirection = true;
+	}
+
+	return continueDirection;
+}
+
+double CourseCalculation::distanceFromWaypointToTackSector(double waypointRadius) const
+{
+	double angleBetweenBTWAndTS =
+		Utility::angleDifference(m_trueWindDirection, m_bearingToWaypoint) - m_sectorAngle;
+
+	return waypointRadius / sin(Utility::degreeToRadian(angleBetweenBTWAndTS));
+}
+
+double CourseCalculation::calculateTackCTS() const
+{
+	double tackCTS = m_trueWindDirection - m_tackAngle;
+	if (m_goingStarboard)
+		tackCTS = m_trueWindDirection + m_tackAngle;
+
+	return Utility::limitAngleRange(tackCTS);
 }
 
 void CourseCalculation::calculateTack()
