@@ -7,7 +7,14 @@
 
 CourseCalculation::CourseCalculation() :
 	m_tack(false),
-	m_goingStarboard(false)
+	m_goingStarboard(false),
+	m_courseToSteer(0.0),
+	m_bearingToWaypoint(0.0),
+	m_distanceToWaypoint(0.0),
+	m_trueWindDirection(0.0),
+	m_tackAngle(0.0),
+	m_sectorAngle(0.0),
+	m_courseMath(PositionModel (0.0,0.0),PositionModel (0.0,0.0) )
 {
 	m_previousIterationTack = false;
 	m_distanceToWaypoint = 100000.0;
