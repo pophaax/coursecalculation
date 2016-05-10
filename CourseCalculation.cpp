@@ -13,8 +13,7 @@ CourseCalculation::CourseCalculation() :
 	m_distanceToWaypoint(0.0),
 	m_trueWindDirection(0.0),
 	m_tackAngle(0.0),
-	m_sectorAngle(0.0),
-	m_courseMath(PositionModel (0.0,0.0),PositionModel (0.0,0.0) )
+	m_sectorAngle(0.0)
 {
 	m_previousIterationTack = false;
 	m_distanceToWaypoint = 100000.0;
